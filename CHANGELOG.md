@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1 — 2026-10-16
+
+- Documentation-only release: the packaged README now links directly to the maintained GitHub wiki guides.
+- Runtime implementation, public API, component dependencies and on-disk formats are unchanged from 1.0.0.
+- Version 1.0.0 remains available; this release does not deprecate or replace it.
+
 ## 1.0.0 — 2026-10-16
 
 - Initial public open-source edition of AbraxasDB.

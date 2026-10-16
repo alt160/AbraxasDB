@@ -8,7 +8,7 @@
     <Nullable>enable</Nullable>
     <PlatformTarget>x64</PlatformTarget>
     <IsPackable>false</IsPackable>
-    <AbraxasPackageVersion Condition="'$(AbraxasPackageVersion)' == ''">1.0.0</AbraxasPackageVersion>
+    <AbraxasPackageVersion Condition="'$(AbraxasPackageVersion)' == ''">1.0.1</AbraxasPackageVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AbraxasDB" Version="$(AbraxasPackageVersion)" />
