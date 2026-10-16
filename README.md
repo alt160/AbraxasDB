@@ -8,7 +8,7 @@ In simplest terms: **object → storage → object**, or **object → storage �
 
 The driving goal is low or no developer ceremony. That includes performance and memory efficiency, not just fewer lines in the first example. This README describes the open-source edition only.
 
-[First record](#a-first-record) · [Queries and values](#find-records-or-just-read-their-values) · [Important contracts](#important-contracts) · [OSS limits](#open-source-edition) · [Guides](docs/wiki/Home.md)
+[First record](#a-first-record) · [Queries and values](#find-records-or-just-read-their-values) · [Important contracts](#important-contracts) · [OSS limits](#open-source-edition) · [Guides](https://github.com/alt160/AbraxasDB/wiki/Home)
 
 ## Why Abraxas?
 
@@ -108,7 +108,7 @@ using (var values = customers.OpenValuesReader(
 
 Use `IterateRecordIDs(adultsNamedA)` when only identities are needed. Conditions also accept property-path strings, and supported covered reads can retrieve values from index keys without opening the record payload.
 
-See [queries and indexes](docs/wiki/Queries-and-indexes.md) for property paths, text profiles, reusable parameters, and index-definition rules.
+See [queries and indexes](https://github.com/alt160/AbraxasDB/wiki/Queries-and-indexes) for property paths, text profiles, reusable parameters, and index-definition rules.
 
 ## Useful scenarios
 
@@ -120,7 +120,7 @@ Abraxas is intended for applications that maintain substantial local repositorie
 
 These are examples, not industry boundaries. The common pattern is substantial local data, complex objects, and different needs for retrieving or analyzing their contents. Smaller uses—settings, application records, and persistent dictionaries—fit too.
 
-Abraxas's performance approach is structural: direct identity lookup, typed indexes, allocation-conscious binary serialization, reusable readers, and selective value access. More indexes add mutation work, and actual cost depends on the query, returned data, durability policy, and storage device. See [performance and threading](docs/wiki/Performance-and-threading.md).
+Abraxas's performance approach is structural: direct identity lookup, typed indexes, allocation-conscious binary serialization, reusable readers, and selective value access. More indexes add mutation work, and actual cost depends on the query, returned data, durability policy, and storage device. See [performance and threading](https://github.com/alt160/AbraxasDB/wiki/Performance-and-threading).
 
 ## Important contracts
 
@@ -130,7 +130,7 @@ Abraxas's performance approach is structural: direct identity lookup, typed inde
 - **A RecordBase is a file family.** It is not one self-contained database file. Use the backup/restore APIs or follow the offline relocation procedure rather than moving individual files.
 - **Record size and total storage are different limits.** Each final serialized record must fit the current contiguous managed-buffer path: below approximately 2 GiB, including required overhead, and subject to available memory. This constrains the stored representation, not the original object's memory footprint; custom serialization can reduce that representation. The OSS identity-space limits below apply separately.
 
-The guides explain [threading and durability](docs/wiki/Performance-and-threading.md#threading-and-durability), [binary-reader lifetimes](docs/wiki/Binary-readers-and-codecs.md), and [backup, restore, and relocation](docs/wiki/Maintenance-and-recovery.md).
+The guides explain [threading and durability](https://github.com/alt160/AbraxasDB/wiki/Performance-and-threading#threading-and-durability), [binary-reader lifetimes](https://github.com/alt160/AbraxasDB/wiki/Binary-readers-and-codecs), and [backup, restore, and relocation](https://github.com/alt160/AbraxasDB/wiki/Maintenance-and-recovery).
 
 ## Open-source edition
 
@@ -159,7 +159,7 @@ For perspective, the following sizing examples assume the same record count in e
 
 These are arithmetic sizing examples, not measured typical record sizes or tested capacity guarantees. They assume sufficient unused identities in every store and exclude indexes, record headers, metadata, and retained mutations; actual disk usage will differ. KiB and GiB use binary units (1 KiB = 1,024 bytes; 1 GiB = 1,073,741,824 bytes).
 
-License: Apache-2.0. See [OSS limits](docs/wiki/Open-source-edition.md) for the full contract.
+License: Apache-2.0. See [OSS limits](https://github.com/alt160/AbraxasDB/wiki/Open-source-edition) for the full contract.
 
 ### Commercial edition
 
@@ -171,15 +171,17 @@ A separately licensed commercial edition provides expanded capacity and addition
 
 Two optional Windows apps demonstrate the public package: [Abraxas Showcase](examples/AbraxasShowcase/README.md) provides runnable lessons and complete C# examples; [Meridian Trading](examples/MeridianTrading/README.md) demonstrates a normalized local repository, natural object graphs, searches, analysis and editing. They are separate from the library package. Their precompiled builds require .NET 8 Windows Desktop (x64) and WebView2 Evergreen.
 
-The [guide home](docs/wiki/Home.md) links to:
+The [GitHub wiki](https://github.com/alt160/AbraxasDB/wiki/Home) is the maintained home for the guides:
 
-- [Getting started](docs/wiki/Getting-started.md)
-- [Queries and indexes](docs/wiki/Queries-and-indexes.md)
-- [Object shapes and hydration](docs/wiki/Object-shapes-and-hydration.md)
-- [Binary readers and codecs](docs/wiki/Binary-readers-and-codecs.md)
-- [Performance and threading](docs/wiki/Performance-and-threading.md)
-- [Maintenance and recovery](docs/wiki/Maintenance-and-recovery.md)
-- [Open-source edition](docs/wiki/Open-source-edition.md)
-- [Design and use cases](docs/wiki/Design-and-use-cases.md)
+- [Getting started](https://github.com/alt160/AbraxasDB/wiki/Getting-started)
+- [Queries and indexes](https://github.com/alt160/AbraxasDB/wiki/Queries-and-indexes)
+- [Object shapes and hydration](https://github.com/alt160/AbraxasDB/wiki/Object-shapes-and-hydration)
+- [Binary readers and codecs](https://github.com/alt160/AbraxasDB/wiki/Binary-readers-and-codecs)
+- [Performance and threading](https://github.com/alt160/AbraxasDB/wiki/Performance-and-threading)
+- [Maintenance and recovery](https://github.com/alt160/AbraxasDB/wiki/Maintenance-and-recovery)
+- [Open-source edition](https://github.com/alt160/AbraxasDB/wiki/Open-source-edition)
+- [Design and use cases](https://github.com/alt160/AbraxasDB/wiki/Design-and-use-cases)
+
+The files in `docs/wiki` are retained as archived staging copies; use the wiki for current guidance.
 
 Abraxas builds on [Inheto](https://github.com/alt160/Inheto), [FractalKVS](https://github.com/alt160/FractalKVS), and [LibraDex](https://github.com/alt160/LibraDex). It adds store lifecycle, record/index coordination, queries, readers, and recovery around those independently useful .NET libraries.
