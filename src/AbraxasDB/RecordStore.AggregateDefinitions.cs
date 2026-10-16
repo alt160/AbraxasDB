@@ -1689,7 +1689,7 @@ public partial class RecordStore<T>
                 return null;
             }
 
-            return identity => index.TryGetSingleKey(identity, out TValue value)
+            return identity => index!.TryGetSingleKey(identity, out TValue value)
                 ? new ReadValue<TValue>(true, value)
                 : default;
         }

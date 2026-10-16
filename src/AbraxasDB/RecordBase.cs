@@ -505,7 +505,7 @@ namespace AbraxasDB
             if (data.TryGetOne(RecordBaseStringSettingsID, out var rec))
             {
                 var ib = Inheto.InhetoBinary.FromStream(new BufferStream(rec.Data), null);
-                ibo = ib.ToObject<Dictionary<string, string>>();
+                ibo = ib.ToObject<Dictionary<string, string>>()!;
             }
             ibo[name] = value;
             var ibnew = Inheto.InhetoBinary.FromObject(ibo, null);
@@ -556,7 +556,7 @@ namespace AbraxasDB
             if (data.TryGetOne(RecordBaseNumericSettingsID, out var rec))
             {
                 var ib = Inheto.InhetoBinary.FromStream(new BufferStream(rec.Data), null);
-                ibo = ib.ToObject<Dictionary<string, long>>();
+                ibo = ib.ToObject<Dictionary<string, long>>()!;
             }
             ibo[name] = value;
             var ibnew = Inheto.InhetoBinary.FromObject(ibo, null);

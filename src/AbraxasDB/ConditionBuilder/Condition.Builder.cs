@@ -356,7 +356,7 @@ namespace AbraxasDB
 
 				var args = new ParameterMaterializedEventArgs(
 					condition,
-					context.RecordStore,
+					context!.RecordStore,
 					context.RecordBase,
 					propertyPath,
 					propertyPathOccurrence,

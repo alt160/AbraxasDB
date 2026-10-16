@@ -120,7 +120,7 @@ namespace AbraxasDB
         /// <exception cref="NullReferenceException">The captured static value is a null reference; this retained implementation calls the value directly.<br/></exception>
         public override int GetHashCode()
         {
-            if (isStaticValue) return staticVal.GetHashCode();
+            if (isStaticValue) return staticVal!.GetHashCode();
             return factory.GetHashCode();
         }
         /// <summary>
@@ -131,7 +131,7 @@ namespace AbraxasDB
         /// <exception cref="NullReferenceException">The captured static value is a null reference; this retained implementation calls the value directly.<br/></exception>
         public override bool Equals(object? obj)
         {
-            if (isStaticValue) return staticVal.Equals(obj);
+            if (isStaticValue) return staticVal!.Equals(obj);
             return factory.Equals(obj);
         }
 
