@@ -164,7 +164,7 @@ internal sealed class MainWindow : Form
             timer.Restart();
             var resultJson = JsonSerializer.SerializeToElement(result, Wire.Options);
             double serializationMs = timer.Elapsed.TotalMilliseconds;
-            var timing = new { databaseMs = actionTiming.DatabaseMs, calculationMs = actionTiming.CalculationMs, queueMs, serializationMs };
+            var timing = new { databaseMs = actionTiming!.DatabaseMs, calculationMs = actionTiming.CalculationMs, queueMs, serializationMs };
             int? returnedRows = resultJson.ValueKind == JsonValueKind.Array ? resultJson.GetArrayLength() :
                 resultJson.ValueKind == JsonValueKind.Object && resultJson.TryGetProperty("rows", out var rows) ? rows.GetArrayLength() : null;
             string body = JsonSerializer.Serialize(new { id, ok = true, result = resultJson, executionMs, timing, returnedRows }, Wire.Options);
