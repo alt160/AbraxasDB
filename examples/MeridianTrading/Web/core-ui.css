@@ -1,0 +1,43 @@
+.pill-button{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid #cad9d2;border-radius:999px;padding:8px 14px;background:#f8fbf8;color:#116553;font-size:11px;font-weight:700;white-space:nowrap}
+.pill-button:hover{background:#edf5f0}
+.lightbox{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:34px}
+.lightbox-backdrop{position:absolute;inset:0;width:100%;height:100%;background:#102d27b8;backdrop-filter:blur(4px)}
+.lightbox-panel{position:relative;width:min(900px,calc(100vw - 68px));max-height:calc(100vh - 68px);overflow:auto;border:1px solid #d7e2dc;border-radius:16px;background:#fff;box-shadow:0 30px 100px #0c27235c}
+.lightbox-panel>header{height:auto;min-height:74px;padding:20px 24px;border-bottom:1px solid #e3e9e5}
+.lightbox-panel>header h2{font-size:21px;color:#164b3e}
+.lightbox-panel>header .eyebrow{margin-bottom:5px}
+.lightbox-close{font-size:18px}
+.lightbox-content{padding:24px;color:#536b62}
+.lightbox-content pre{margin:0;max-height:52vh;overflow:auto;padding:18px;border-radius:10px;background:#f2f6f3;color:#173f34}
+.lightbox-content code{white-space:pre-wrap;overflow-wrap:anywhere}
+.lightbox-content .canonical-block{margin-top:18px;padding-top:18px;border-top:1px solid #e1e8e4}
+.lightbox-content .canonical-block code{display:block;margin-top:7px}
+.condition-provenance{display:grid;gap:4px;margin-bottom:18px;padding:14px 16px;border:1px solid #b9d5c9;border-radius:11px;background:#eff7f3;color:#315e51}
+.condition-provenance strong{color:#155846}
+.condition-provenance span{font-size:12px}
+.condition-native-block>small,.condition-code-block>small,.canonical-block>small{display:block;color:#648078;font-size:10px;font-weight:800;letter-spacing:.08em}
+.condition-native-block pre{margin-top:8px}
+.condition-code-block{margin-top:18px;padding-top:18px;border-top:1px solid #e1e8e4}
+.condition-code-block pre{margin-top:8px}
+.condition-code-block p{margin:9px 2px 0;color:#71867f;font-size:11px}
+.lightbox[hidden]{display:none!important}
+@media(prefers-reduced-motion:no-preference){.lightbox-panel{animation:lightbox-in .14s ease-out}@keyframes lightbox-in{from{transform:translateY(8px) scale(.99);opacity:0}to{transform:none;opacity:1}}}
+
+/* Meridian-owned form vocabulary. Native values remain authoritative; selects receive an accessible themed listbox in app.js. */
+body input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="button"]):not([type="submit"]),body textarea{border:1px solid #cedbd4;border-radius:8px;padding:10px 12px;background:#fbfcfa;color:#25483e;box-shadow:inset 0 1px 0 #fff;transition:border-color .13s,box-shadow .13s,background .13s}
+body input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="button"]):not([type="submit"]):hover,body textarea:hover{border-color:#aec7bc;background:#fff}
+body input::placeholder,body textarea::placeholder{color:#91a198;opacity:1}
+.meridian-select-source{display:none!important}
+.meridian-select{position:relative;display:block;min-width:180px;margin-top:7px}
+.meridian-select-trigger{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:40px;padding:8px 34px 8px 12px;border:1px solid #cedbd4;border-radius:8px;background:#fbfcfa;color:#35564c;text-align:left;white-space:nowrap;overflow:hidden;box-shadow:inset 0 1px 0 #fff;position:relative}
+.meridian-select-trigger::after{content:"";position:absolute;right:13px;top:50%;width:7px;height:7px;border-right:2px solid #2b6c5c;border-bottom:2px solid #2b6c5c;transform:translateY(-68%) rotate(45deg);transition:transform .13s}
+.meridian-select.is-open .meridian-select-trigger{border-color:#67a995;box-shadow:0 0 0 3px #6fb6a024;background:#fff}
+.meridian-select.is-open .meridian-select-trigger::after{transform:translateY(-28%) rotate(225deg)}
+.meridian-select-value{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.meridian-select-list{position:fixed;z-index:60;display:grid;max-height:min(320px,50vh);overflow:auto;padding:6px;border:1px solid #c9d8d1;border-radius:11px;background:#fff;box-shadow:0 18px 48px #153b3030}
+.meridian-select-option{position:relative;width:100%;padding:9px 34px 9px 11px;border-radius:7px;background:#fff;color:#35554b;text-align:left;font-size:11px;white-space:normal}
+.meridian-select-option:hover,.meridian-select-option:focus-visible{background:#edf5f1;color:#155846;outline:0}
+.meridian-select-option[aria-selected="true"]{background:#e6f1ec;color:#126554;font-weight:700}
+.meridian-select-option[aria-selected="true"]::after{content:"✓";position:absolute;right:11px;color:#14705d}
+.sort-label .meridian-select,.analysis-controls .meridian-select{display:inline-block;margin:0;vertical-align:middle}
+.sort-label .meridian-select-trigger{min-height:36px}

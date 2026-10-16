@@ -1,0 +1,25 @@
+// One context owns the RecordBase and its stores across setup and subsequent work.
+public sealed class ShowcasePersistenceContext : IDisposable
+{
+    private readonly RecordBase recordBase;
+    public RecordStore<ShowcaseCustomer> Customers { get; }
+    public RecordStore<ShowcaseOrder> Orders { get; }
+
+    /// <summary>Opens the group's RecordBase and keeps its indexed stores for repeated persistence operations.<br/></summary>
+    /// <param name="directory">Application-owned folder for this RecordBase's related files.<br/></param>
+    public ShowcasePersistenceContext(string directory)
+    {
+        Directory.CreateDirectory(directory);
+        recordBase = RecordBase.CreateOrOpen(directory, "showcase");
+        Customers = recordBase.CreateOrOpenStore<ShowcaseCustomer>("customers", "Showcase customers");
+        Orders = recordBase.CreateOrOpenStore<ShowcaseOrder>("orders", "Normalized showcase orders");
+        Customers.CreateIndex(customer => customer.Code, IndexDirection.Ascending);
+        Customers.CreateIndex(customer => customer.Region, IndexDirection.Ascending);
+        Orders.CreateIndex(order => order.CustomerID, IndexDirection.Ascending);
+        Orders.CreateIndex(order => order.OrderedAt, IndexDirection.Ascending);
+        Orders.CreateIndex(order => order.Status, IndexDirection.Ascending);
+    }
+
+    /// <summary>Closes the RecordBase when this application's group context ends.<br/></summary>
+    public void Dispose() => recordBase.Dispose();
+}

@@ -1,0 +1,11 @@
+// Child orders store their parent's external RecordID at .CustomerID.
+{
+    using var reader = customers.Readers.Open();
+    if (reader.Read())
+    {
+        ulong customerID = reader.ID;
+        var condition = orders.Where.Prop(order => order.CustomerID).EqualTo(customerID).EndCondition;
+        int count = orders.IterateRecordIDs(condition).Count();
+        Console.WriteLine($"Customer {customerID} has {count} orders");
+    }
+}

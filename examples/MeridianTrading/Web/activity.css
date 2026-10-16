@@ -1,0 +1,11 @@
+#performance-bar{z-index:6;display:block;padding:9px 24px;color:#35544d;font-size:11px;min-height:94px;background:#f7faf7;border-top:1px solid #cbd8ce}
+.status-heading{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+#activity{display:flex;align-items:center;gap:8px;max-width:100%}#activity-label{overflow-wrap:anywhere}
+.performance-values{display:flex;gap:7px 18px;flex-wrap:wrap;font-variant-numeric:tabular-nums}.performance-values b{color:#173f37}.performance-values span{white-space:nowrap}
+.runtime-footer{display:flex;gap:7px 18px;flex-wrap:wrap;margin-top:7px;padding-top:7px;border-top:1px solid #dce5de;color:#667b71;font-size:9px;font-variant-numeric:tabular-nums}.runtime-footer span{white-space:nowrap}.runtime-footer b{color:#244f40;font-weight:650}
+.wait-spinner{display:inline-block;width:12px;height:12px;border:2px solid #c8d9d1;border-top-color:#12695d;border-radius:50%;animation:busy-spin .8s linear infinite;flex-shrink:0}
+#activity:not([data-busy="true"]) .wait-spinner{display:none}.loading:before{content:"";display:inline-block;width:18px;height:18px;border:3px solid #d3e2da;border-top-color:#12695d;border-radius:50%;animation:busy-spin .8s linear infinite;margin-right:12px;vertical-align:middle}
+main{padding-bottom:145px}.drawer{bottom:116px}.diagnostics{bottom:128px}#toast{bottom:133px}
+.progress.indeterminate i{width:35%!important;animation:indeterminate 1.2s ease-in-out infinite}
+@keyframes busy-spin{to{transform:rotate(360deg)}}@keyframes indeterminate{from{transform:translateX(-100%)}to{transform:translateX(390%)}}
+@media(prefers-reduced-motion:reduce){.wait-spinner,.loading:before,.progress.indeterminate i{animation:none}}

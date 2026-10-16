@@ -1,0 +1,36 @@
+// Choose the folder and name for this example's RecordBase file set.
+string recordBaseDirectory = Path.Combine(
+    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+    "AbraxasExamples",
+    "TypedRecordStore");
+Directory.CreateDirectory(recordBaseDirectory);
+
+// An application context can own the RecordBase and stores across many operations.
+using var context = new ShowcaseTypedStoreContext(recordBaseDirectory);
+RecordStore<ShowcaseCustomer> customers = context.Customers;
+
+// CreateOrOpenStore<T> supports both first-run creation and later application starts.
+// The context created or opened the store once when it started.
+
+// OpenStore<T> is the explicit alternative when the store must already exist.
+RecordStore<ShowcaseCustomer> reopenedCustomers = context.RecordBase.OpenStore<ShowcaseCustomer>("customers");
+
+Console.WriteLine($"Store: {context.RecordBase.GetStoreInfo("customers")?.Name}");
+Console.WriteLine($"Records: {reopenedCustomers.Aggregates.Count()}");
+
+public sealed class ShowcaseTypedStoreContext : IDisposable
+{
+    public RecordBase RecordBase { get; }
+    public RecordStore<ShowcaseCustomer> Customers { get; }
+
+    /// <summary>Opens one RecordBase and retains its typed store for repeated application operations.<br/></summary>
+    /// <param name="directory">Application-owned folder for the named RecordBase files.<br/></param>
+    public ShowcaseTypedStoreContext(string directory)
+    {
+        RecordBase = RecordBase.CreateOrOpen(directory, "showcase");
+        Customers = RecordBase.CreateOrOpenStore<ShowcaseCustomer>("customers", "Showcase customers");
+    }
+
+    /// <summary>Closes the RecordBase when the application context ends, after its store work is complete.<br/></summary>
+    public void Dispose() => RecordBase.Dispose();
+}

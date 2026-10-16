@@ -1,0 +1,7 @@
+// Stop selection when the first match is enough; no ordering is promised.
+{
+    var condition = customers.Where.Prop(customer => customer.Region).EqualTo("West").EndCondition;
+    ulong recordID = customers.IterateRecordIDs(condition).FirstOrDefault();
+    ShowcaseCustomer? customer = recordID == 0 ? null : customers.Get(recordID);
+    Console.WriteLine(customer?.Name ?? "No match");
+}

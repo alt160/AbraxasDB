@@ -1,0 +1,13 @@
+// ! introduces a dictionary key. Spaces and later punctuation are literal key
+// content; the final .Length continues from the selected string value.
+{
+    using var reader = pathGraphs.Readers.Open();
+    if (reader.Read())
+    {
+        ulong id = reader.ID;
+        string gate = pathGraphs.GetValue<string>(id, ".Addresses.Home.Notes!Gate Code");
+        string important = pathGraphs.GetValue<string>(id, ".Addresses#2.Notes!Important!");
+        int length = pathGraphs.GetValue<int>(id, ".Addresses#2.Notes!Important!.Length");
+        Console.WriteLine($"Gate: {gate}; Important!: {important} ({length} characters)");
+    }
+}

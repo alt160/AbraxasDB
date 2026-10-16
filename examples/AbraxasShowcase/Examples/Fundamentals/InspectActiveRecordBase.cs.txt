@@ -1,0 +1,16 @@
+// Choose the folder and name for this example's RecordBase file set.
+string recordBaseDirectory = Path.Combine(
+    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+    "AbraxasExamples",
+    "InspectRecordBase");
+Directory.CreateDirectory(recordBaseDirectory);
+
+using RecordBase recordBase = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase");
+_ = recordBase.CreateOrOpenStore<ShowcaseCustomer>("customers", "Showcase customers");
+
+// GetStoreInfos returns detached public metadata rather than private engine state.
+RecordBase.StoresInfo stores = recordBase.GetStoreInfos() ?? new RecordBase.StoresInfo();
+foreach (RecordBase.StoreInfo store in stores.Values.OrderBy(store => store.Name))
+{
+    Console.WriteLine($"{store.Name} · {store.ItemType?.FullName} · {store.Lifecycle}");
+}

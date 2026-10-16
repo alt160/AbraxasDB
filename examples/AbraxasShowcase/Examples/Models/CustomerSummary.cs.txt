@@ -1,0 +1,12 @@
+public sealed class ShowcaseCustomerSummary
+{
+    public string Code { get; set; } = "";
+    public string Region { get; set; } = "";
+}
+
+public sealed class ShowcaseCustomerAlternative
+{
+    public string Name { get; set; } = "";
+    public string Region { get; set; } = "";
+    public string Unmatched { get; set; } = "not stored";
+}

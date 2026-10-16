@@ -1,0 +1,10 @@
+// The activator supplies a new Address; Inheto then fills its stored City.
+// documents belongs to the group context and remains available until that context is disposed.
+{
+    using var reader = documents.Readers.Open();
+    if (reader.Read())
+    {
+        ShowcaseHookDocument document = documents.Get(reader.ID);
+        Console.WriteLine($"{document.Address.City}: {document.Address.CreatedBy}");
+    }
+}

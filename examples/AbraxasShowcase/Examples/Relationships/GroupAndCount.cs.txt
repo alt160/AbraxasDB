@@ -1,0 +1,11 @@
+// The group setup has inserted normalized orders; this aggregate groups their stored Status values.
+// The group context above owns the open RecordBase and stores.
+{
+    var definition = orders.Aggregates.GroupBy(order => order.Status).AddKey().AddCount();
+    using var reader = orders.Aggregates.Open(definition);
+    while (reader.Read())
+    {
+        var row = reader.Get();
+        Console.WriteLine($"{row.Value1}: {row.Value2}");
+    }
+}

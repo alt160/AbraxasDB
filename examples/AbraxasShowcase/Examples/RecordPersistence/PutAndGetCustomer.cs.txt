@@ -1,0 +1,15 @@
+// customers was declared and prepared by this group's setup code.
+var customer = new ShowcaseCustomer
+{
+    Code = "LIVE-" + DateTime.UtcNow.Ticks,
+    Name = "Live scenario customer",
+    Region = "West",
+    Tags = ["scenario", "round-trip"]
+};
+
+// Put returns Abraxas's external UInt64 RecordID; the object needs no identity member.
+ulong recordID = customers.Put(customer);
+ShowcaseCustomer hydrated = customers.Get(recordID);
+
+Console.WriteLine($"RecordID: {recordID}");
+Console.WriteLine($"Hydrated customer: {hydrated.Code} · {hydrated.Name}");

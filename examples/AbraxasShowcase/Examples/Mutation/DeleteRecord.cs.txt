@@ -1,0 +1,8 @@
+// Insert a scenario-owned record, then prove that the same RecordID no longer resolves.
+// The group context above owns the open RecordBase and stores.
+{
+    ulong recordID = customers.Put(new ShowcaseCustomer { Code = "DELETE-" + Guid.NewGuid().ToString("N"), Name = "Delete example", Region = "West" });
+    bool deleted = customers.Delete(recordID);
+    bool found = customers.TryGet(recordID, out ShowcaseCustomer? _);
+    Console.WriteLine($"Deleted: {deleted}; still found: {found}");
+}

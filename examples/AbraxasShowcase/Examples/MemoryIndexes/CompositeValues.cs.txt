@@ -1,0 +1,13 @@
+// The names remain separate key parts. Neither a combined Name property nor string concatenation is required.
+const string displayNameIndex = "session-display-name";
+if (!customers.TryGetIndex(displayNameIndex, out _, useMemoryIndex: true))
+{
+    var nameSelector = new Selector<ShowcaseCustomer>();
+    customers.CreateMemoryCompositeIndex(displayNameIndex,
+        nameSelector.Prop(customer => customer.FirstName).ForIndexing(),
+        nameSelector.Prop(customer => customer.LastName).ForIndexing());
+}
+using (var names = customers.Readers.OpenCompositeValues<string, string>(displayNameIndex))
+    while (names.Read())
+        Console.WriteLine($"{names.ID}: {names.Value1} {names.Value2}");
+Console.WriteLine($"Durable indexes: {customers.GetIndexes().Count() - customers.GetIndexes(useMemoryIndex: true).Count()}");

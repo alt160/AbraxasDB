@@ -1,0 +1,18 @@
+public sealed class ShowcaseCustomer
+{
+    public string Code { get; set; } = "";
+    public string Name { get; set; } = "";
+    public string Region { get; set; } = "";
+    public string[] Tags { get; set; } = [];
+    public string FirstName { get; set; } = "";
+    public string LastName { get; set; } = "";
+}
+
+public sealed class ShowcaseOrder
+{
+    public string Number { get; set; } = "";
+    public ulong CustomerID { get; set; }
+    public DateTime OrderedAt { get; set; }
+    public decimal Total { get; set; }
+    public string Status { get; set; } = "";
+}

@@ -1,0 +1,22 @@
+string recordBaseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AbraxasExamples", "MemoryIndexes");
+using var context = new ShowcaseMemoryIndexContext(recordBaseDirectory);
+RecordStore<ShowcaseCustomer> customers = context.Customers;
+RecordStore<ShowcaseOrder> orders = context.Orders;
+// Run setup on an empty example RecordBase, then keep the context open for the scenario.
+// The Showcase runner resets its owned group environment before executing this setup.
+if (!customers.IterateRecordIDs().Any())
+{
+    string[] firstNames = ["Ada", "Grace", "Alan", "Katherine"];
+    string[] lastNames = ["Lovelace", "Hopper", "Turing", "Johnson"];
+    for (int index = 0; index < 24; index++)
+    {
+        ulong customerId = customers.Put(new ShowcaseCustomer
+        {
+            Code = $"MEM-{index + 1:000000}", FirstName = firstNames[index % firstNames.Length],
+            LastName = lastNames[index % lastNames.Length], Name = $"Customer {index + 1:000000}",
+            Region = index % 2 == 0 ? "West" : "East"
+        });
+        orders.Put(new ShowcaseOrder { Number = $"MEM-SO-{index + 1:000000}-01", CustomerID = customerId,
+            OrderedAt = new DateTime(2026, 1, 1).AddDays(index), Total = 20m + index, Status = "Open" });
+    }
+}

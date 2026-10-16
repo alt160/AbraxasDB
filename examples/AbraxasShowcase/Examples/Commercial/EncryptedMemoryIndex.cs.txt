@@ -1,0 +1,30 @@
+// Commercial Abraxas edition only. This example uses synthetic data, never a real secret.
+// A memory-only index avoids a durable LibraDex copy of SecretCode; encryption protects its record payload.
+string recordBaseDirectory = Path.Combine(Path.GetTempPath(), "AbraxasExamples", "EncryptedMemoryIndex-" + Guid.NewGuid().ToString("N"));
+Directory.CreateDirectory(recordBaseDirectory);
+byte[] demoKey = RandomNumberGenerator.GetBytes(32);
+var configuration = RecordBaseConfiguration.Default;
+configuration.RecordPayloadEncryption = RecordPayloadEncryptionOptions.AesGcm(_ => demoKey, "sensitive-v1");
+try
+{
+    ulong id;
+    using (RecordBase recordBase = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase", configuration))
+    {
+        RecordStore<ShowcaseVaultRecord> records = recordBase.CreateOrOpenStore<ShowcaseVaultRecord>("vault", "Protected payload examples");
+        id = records.Put(new ShowcaseVaultRecord { Code = "fixture", SecretCode = "DEMO-42", Body = "Synthetic sensitive value" });
+        records.CreateMemoryIndex(record => record.SecretCode, TextIndexProfile.Exact, IndexDirection.Ascending);
+        Console.WriteLine($"Found through memory index: {records.GetOrDefault(".SecretCode", "DEMO-42")?.Code == "fixture"}");
+        Console.WriteLine($"Memory-only index exists now: {records.GetIndexes(useMemoryIndex: true).Any(index => index.Backend.KeyPath == ".SecretCode")}");
+    }
+    using (RecordBase reopened = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase", configuration))
+    {
+        RecordStore<ShowcaseVaultRecord> records = reopened.OpenStore<ShowcaseVaultRecord>("vault");
+        Console.WriteLine($"Memory index absent after reopen: {!records.GetIndexes(useMemoryIndex: true).Any(index => index.Backend.KeyPath == ".SecretCode")}");
+        Console.WriteLine($"Encrypted record still readable: {records.Get(id)?.SecretCode == "DEMO-42"}");
+    }
+}
+finally
+{
+    Directory.Delete(recordBaseDirectory, recursive: true);
+    CryptographicOperations.ZeroMemory(demoKey);
+}

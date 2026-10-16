@@ -1,0 +1,9 @@
+// The array member is stored and read with the rest of an ordinary customer.
+{
+    using var reader = customers.Readers.Open();
+    if (reader.Read())
+    {
+        ShowcaseCustomer customer = reader.Get();
+        Console.WriteLine(string.Join(", ", customer.Tags));
+    }
+}

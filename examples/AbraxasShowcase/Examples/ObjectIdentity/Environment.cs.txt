@@ -1,0 +1,20 @@
+// The RecordBase and both stores share one application-owned lifetime.
+public sealed class ShowcaseIdentityContext : IDisposable
+{
+    private readonly RecordBase recordBase;
+    public RecordStore<ShowcaseCustomerProfile> Profiles { get; }
+    public RecordStore<ShowcaseIdentityFreeNote> Notes { get; }
+
+    /// <summary>Opens the group RecordBase and retains its profile and note stores for repeated operations.<br/></summary>
+    /// <param name="directory">Application-owned folder containing this RecordBase's related files.<br/></param>
+    public ShowcaseIdentityContext(string directory)
+    {
+        Directory.CreateDirectory(directory);
+        recordBase = RecordBase.CreateOrOpen(directory, "showcase");
+        Profiles = recordBase.CreateOrOpenStore<ShowcaseCustomerProfile>("customer-profiles", "Nested customer profile examples");
+        Notes = recordBase.CreateOrOpenStore<ShowcaseIdentityFreeNote>("identity-free-notes", "Identity-free domain object examples");
+    }
+
+    /// <summary>Closes the RecordBase after profile and note work is complete.<br/></summary>
+    public void Dispose() => recordBase.Dispose();
+}

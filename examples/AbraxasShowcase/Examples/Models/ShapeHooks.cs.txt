@@ -1,0 +1,64 @@
+public sealed class ShowcaseHookDocument
+{
+    public string Title { get; set; } = "";
+    public string PrivateMemo { get; set; } = "";
+    public ShowcaseHookToken PathToken { get; set; } = new();
+    public ShowcaseHookToken[] TypeTokens { get; set; } = [];
+    public ShowcaseHookAddress Address { get; set; } = null!;
+    public ShowcaseHookTransient? Transient { get; set; }
+    public ShowcaseContextualPayload ContextPayload { get; set; } = new();
+}
+public sealed class ShowcaseHookToken { public int Code { get; set; } }
+public sealed class ShowcaseHookAddress
+{
+    public string City { get; set; } = "";
+    public string CreatedBy { get; set; } = "Default constructor";
+}
+public sealed class ShowcaseHookTransient { public string RuntimeNote { get; set; } = ""; }
+public sealed class ShowcaseContextualPayload
+{
+    public string Text { get; set; } = "";
+    public System.Text.RegularExpressions.Regex Pattern { get; set; } = new(".*");
+}
+public static class ShowcaseCodecContext
+{
+    public static System.Threading.AsyncLocal<bool> UseUtf16 { get; } = new();
+}
+public static class ShowcaseContextualCodec
+{
+    /// <summary>Writes semantic text and Regex configuration using a format selected by the current application context.<br/>The stored marker makes decoding independent of that future context.<br/></summary>
+    /// <param name="value">The semantic value to store.<br/></param>
+    /// <returns>Marker 1 and UTF-8 JSON, or marker 2 and UTF-16 JSON.<br/></returns>
+    public static byte[] Encode(ShowcaseContextualPayload value)
+    {
+        bool utf16 = ShowcaseCodecContext.UseUtf16.Value;
+        string json = System.Text.Json.JsonSerializer.Serialize(new { value.Text, Pattern = value.Pattern.ToString(), Options = (int)value.Pattern.Options });
+        byte[] content = utf16 ? System.Text.Encoding.Unicode.GetBytes(json) : System.Text.Encoding.UTF8.GetBytes(json);
+        byte[] stored = new byte[content.Length + 1];
+        stored[0] = utf16 ? (byte)2 : (byte)1;
+        content.CopyTo(stored, 1);
+        return stored;
+    }
+
+    /// <summary>Reads the stored marker and decodes the value without consulting current UI or request state.<br/>An unknown marker fails explicitly instead of silently corrupting the meaning.<br/></summary>
+    /// <param name="stored">The marker-prefixed bytes returned to the type hook.<br/></param>
+    /// <returns>The original application value.<br/></returns>
+    public static ShowcaseContextualPayload Decode(ReadOnlySpan<byte> stored)
+    {
+        if (stored.Length == 0) throw new InvalidDataException("The contextual payload has no format marker.");
+        string json = stored[0] switch
+        {
+            1 => System.Text.Encoding.UTF8.GetString(stored[1..]),
+            2 => System.Text.Encoding.Unicode.GetString(stored[1..]),
+            _ => throw new InvalidDataException($"Unknown contextual payload format {stored[0]}.")
+        };
+        using var document = System.Text.Json.JsonDocument.Parse(json);
+        var root = document.RootElement;
+        return new ShowcaseContextualPayload
+        {
+            Text = root.GetProperty("Text").GetString() ?? "",
+            Pattern = new System.Text.RegularExpressions.Regex(root.GetProperty("Pattern").GetString() ?? "",
+                (System.Text.RegularExpressions.RegexOptions)root.GetProperty("Options").GetInt32())
+        };
+    }
+}

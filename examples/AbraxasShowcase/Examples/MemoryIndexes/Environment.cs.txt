@@ -1,0 +1,20 @@
+// The context owns the durable RecordBase and its customer store for all subsequent work.
+public sealed class ShowcaseMemoryIndexContext : IDisposable
+{
+    private readonly RecordBase recordBase;
+    public RecordStore<ShowcaseCustomer> Customers { get; }
+    public RecordStore<ShowcaseOrder> Orders { get; }
+
+    /// <summary>Opens durable customer records without defining any durable secondary index.<br/></summary>
+    /// <param name="directory">Application-owned directory for this named RecordBase.<br/></param>
+    public ShowcaseMemoryIndexContext(string directory)
+    {
+        Directory.CreateDirectory(directory);
+        recordBase = RecordBase.CreateOrOpen(directory, "showcase");
+        Customers = recordBase.CreateOrOpenStore<ShowcaseCustomer>("customers", "Memory-index examples");
+        Orders = recordBase.CreateOrOpenStore<ShowcaseOrder>("orders", "Memory-index examples for orders");
+    }
+
+    /// <summary>Closes the store and drops its memory-only indexes with the owning RecordBase.<br/></summary>
+    public void Dispose() => recordBase.Dispose();
+}

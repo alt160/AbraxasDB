@@ -1,0 +1,8 @@
+// Uri and Version are ordinary members here; neither needs a custom codec.
+using var reader = profiles.Readers.Open();
+if (reader.Read())
+{
+    ShowcasePreferences values = profiles.Get(reader.ID)!.Preferences;
+    Console.WriteLine($"Portal: {values.Portal} ({values.Portal.GetType().Name})");
+    Console.WriteLine($"Format: {values.FormatVersion} ({values.FormatVersion.GetType().Name})");
+}

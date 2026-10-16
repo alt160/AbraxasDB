@@ -1,0 +1,28 @@
+// profiles was declared and prepared by this group's setup code.
+var profile = new ShowcaseCustomerProfile
+{
+    AccountCode = "GRAPH-" + DateTime.UtcNow.Ticks,
+    Contact = new ShowcaseContact
+    {
+        DisplayName = "Ada Northwind",
+        Email = "ada@example.test",
+        PhoneNumbers = ["+1 602 555 0101", "+1 602 555 0102"]
+    },
+    Locations =
+    [
+        new ShowcaseAddress { Kind = "Billing", City = "Phoenix", Region = "AZ", PostalCode = "85001" },
+        new ShowcaseAddress { Kind = "Shipping", City = "Tempe", Region = "AZ", PostalCode = "85281" }
+    ],
+    Preferences = new ShowcasePreferences
+    {
+        ReceivesUpdates = true,
+        Locale = "en-US",
+        Interests = ["performance", "object graphs", "indexes"]
+    }
+};
+
+ulong recordID = profiles.Put(profile);
+ShowcaseCustomerProfile hydrated = profiles.Get(recordID);
+
+Console.WriteLine($"RecordID: {recordID}");
+Console.WriteLine($"Hydrated profile: {hydrated.AccountCode} · {hydrated.Contact.DisplayName}");

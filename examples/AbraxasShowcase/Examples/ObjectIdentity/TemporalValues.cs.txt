@@ -1,0 +1,10 @@
+// The group's ordinary profile type declares these members without serialization attributes.
+using var reader = profiles.Readers.Open();
+if (reader.Read())
+{
+    ShowcasePreferences values = profiles.Get(reader.ID)!.Preferences;
+    Console.WriteLine($"Guid: {values.FavoriteId}");
+    Console.WriteLine($"DateOnly: {values.RenewalDate}");
+    Console.WriteLine($"TimeOnly: {values.ContactTime}");
+    Console.WriteLine($"DateTimeOffset: {values.LastContact}");
+}

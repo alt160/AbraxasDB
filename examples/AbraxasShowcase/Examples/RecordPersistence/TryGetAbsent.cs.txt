@@ -1,0 +1,7 @@
+// TryGet is useful when a valid RecordID no longer has a record in this store.
+{
+    ulong recordID = customers.Put(new ShowcaseCustomer { Code = "TRYGET-" + Guid.NewGuid().ToString("N"), Name = "Temporary customer" });
+    customers.Delete(recordID);
+    bool found = customers.TryGet(recordID, out ShowcaseCustomer? customer);
+    Console.WriteLine($"Found: {found}; customer: {customer?.Name ?? "none"}");
+}

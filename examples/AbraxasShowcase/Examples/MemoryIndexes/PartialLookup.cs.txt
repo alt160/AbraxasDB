@@ -1,0 +1,11 @@
+// The membership rule is fixed when the index is built; this is not a per-query filter.
+const string westCodeIndex = "session-west-codes";
+if (!customers.TryGetIndex(westCodeIndex, out _, useMemoryIndex: true))
+    customers.CreateMemoryIndex(".Code", TextIndexProfile.Exact, IndexDirection.Ascending,
+        where: customers.Where.Prop(customer => customer.Region).EqualTo("West").EndCondition,
+        indexName: westCodeIndex);
+ulong[] indexedIds = customers.IterateRecordIDs(
+    customers.GetIndex(westCodeIndex, useMemoryIndex: true)).ToArray();
+Console.WriteLine($"Indexed West customers: {indexedIds.Length}");
+Console.WriteLine($"Durable indexes: {customers.GetIndexes().Count() - customers.GetIndexes(useMemoryIndex: true).Count()}");
+// The source records are still durable; this memory-only index is not a privacy control.

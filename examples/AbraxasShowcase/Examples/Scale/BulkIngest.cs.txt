@@ -1,0 +1,15 @@
+// Increase batchSize or prepare a larger group RecordBase to compare throughput on this machine.
+// The group context above owns the open RecordBase and stores.
+{
+    int batchSize = 100;
+    string prefix = "BULK-" + customers.Aggregates.Count().ToString("D10") + "-";
+    ShowcaseCustomer[] batch = Enumerable.Range(0, batchSize).Select(index => new ShowcaseCustomer
+    {
+        Code = prefix + index.ToString("D5"), Name = "Batch customer " + index.ToString("D5"), Region = "West"
+    }).ToArray();
+    var watch = System.Diagnostics.Stopwatch.StartNew();
+    var outcome = customers.PutManyFast(batch);
+    using (outcome.IndexingBatch) { }
+    watch.Stop();
+    Console.WriteLine($"Inserted {outcome.RecordIds.Count} in {watch.Elapsed.TotalMilliseconds:N2} ms");
+}

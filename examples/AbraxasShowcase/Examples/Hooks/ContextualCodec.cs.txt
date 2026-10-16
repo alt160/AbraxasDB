@@ -1,0 +1,29 @@
+// The group context registered one writer and reader for ShowcaseContextualPayload.
+// A request or UI preference can choose the write format, but every stored value
+// carries its own marker so the reader never needs that old preference.
+{
+    bool previous = ShowcaseCodecContext.UseUtf16.Value;
+    try
+    {
+        ShowcaseCodecContext.UseUtf16.Value = true;
+        ulong id = documents.Put(new ShowcaseHookDocument
+        {
+            Title = "Context-selected wire format",
+            Address = new ShowcaseHookAddress { City = "Phoenix" },
+            ContextPayload = new ShowcaseContextualPayload
+            {
+                Text = "Read after context changes",
+                Pattern = new System.Text.RegularExpressions.Regex("^read after", System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+            }
+        });
+
+        ShowcaseCodecContext.UseUtf16.Value = false;
+        ShowcaseHookDocument restored = documents.Get(id)!;
+        Console.WriteLine($"Decoded under a different setting: {restored.ContextPayload.Text}");
+        Console.WriteLine($"Restored regex matches: {restored.ContextPayload.Pattern.IsMatch(restored.ContextPayload.Text)}");
+    }
+    finally
+    {
+        ShowcaseCodecContext.UseUtf16.Value = previous;
+    }
+}

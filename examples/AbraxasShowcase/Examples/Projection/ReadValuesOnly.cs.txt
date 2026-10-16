@@ -1,0 +1,20 @@
+// Ask for stored member paths directly. No destination customer or order type is filled.
+// The group context above owns the open RecordBase and stores.
+{
+    using var reader = customers.Readers.Open();
+    if (reader.Read())
+    {
+        // This array could come from a report definition or UI choice.
+        string[] selectedPaths = [".Code", ".Tags"];
+        List<object?>? values = customers.GetValues(reader.ID, selectedPaths);
+        Console.WriteLine($"Code ({values?[0]?.GetType().Name}): {values?[0]}");
+        Console.WriteLine($"Tags ({values?[1]?.GetType().Name}): {string.Join(", ", (string[]?)values?[1] ?? [])}");
+    }
+    using var orderReader = orders.Readers.Open();
+    if (orderReader.Read())
+    {
+        List<object?>? values = orders.GetValues(orderReader.ID, ".Total", ".OrderedAt");
+        Console.WriteLine($"Total ({values?[0]?.GetType().Name}): {values?[0]}");
+        Console.WriteLine($"OrderedAt ({values?[1]?.GetType().Name}): {values?[1]}");
+    }
+}

@@ -1,0 +1,44 @@
+public sealed class ShowcaseCustomerProfile
+{
+    public string AccountCode { get; set; } = "";
+    public ShowcaseContact Contact { get; set; } = new();
+    public ShowcaseAddress[] Locations { get; set; } = [];
+    public ShowcasePreferences Preferences { get; set; } = new();
+}
+
+public sealed class ShowcaseContact
+{
+    public string DisplayName { get; set; } = "";
+    public string Email { get; set; } = "";
+    public string[] PhoneNumbers { get; set; } = [];
+}
+
+public sealed class ShowcaseAddress
+{
+    public string Kind { get; set; } = "";
+    public string City { get; set; } = "";
+    public string Region { get; set; } = "";
+    public string PostalCode { get; set; } = "";
+}
+
+public sealed class ShowcasePreferences
+{
+    public bool ReceivesUpdates { get; set; }
+    public string Locale { get; set; } = "";
+    public string[] Interests { get; set; } = [];
+    public Guid FavoriteId { get; set; }
+    public DateOnly RenewalDate { get; set; }
+    public TimeOnly ContactTime { get; set; }
+    public DateTimeOffset LastContact { get; set; }
+    public Uri Portal { get; set; } = new("https://example.test/");
+    public Version FormatVersion { get; set; } = new(1, 0);
+    public Dictionary<string, int> Limits { get; set; } = [];
+    public HashSet<string> Labels { get; set; } = [];
+}
+
+public sealed class ShowcaseIdentityFreeNote
+{
+    public string Subject { get; set; } = "";
+    public string Body { get; set; } = "";
+    public DateTime CreatedUtc { get; set; }
+}

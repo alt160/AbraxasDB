@@ -1,0 +1,40 @@
+public sealed class ShowcasePathGraph
+{
+    public ShowcaseAddressBook Addresses { get; set; } = new();
+    public ShowcaseCoordinate[,] Coordinates { get; set; } = new ShowcaseCoordinate[0, 0];
+
+    /// <summary>Creates one graph with a shared Home address, literal note keys, and a two-dimensional coordinate array.<br/></summary>
+    /// <returns>A deterministic graph for the PropPath examples.<br/></returns>
+    public static ShowcasePathGraph CreateExample()
+    {
+        var home = new ShowcasePathAddress { Street = "100 Home Lane", Notes = new Dictionary<string, string> { ["Gate Code"] = "2468" } };
+        var addresses = new ShowcaseAddressBook
+        {
+            home,
+            new ShowcasePathAddress { Street = "200 Work Way" },
+            new ShowcasePathAddress { Street = "300 Archive Road", Notes = new Dictionary<string, string> { ["Important!"] = "Keep this" } }
+        };
+        addresses.Home = home;
+        var coordinates = new ShowcaseCoordinate[2, 3];
+        for (int row = 0; row < 2; row++)
+            for (int column = 0; column < 3; column++)
+                coordinates[row, column] = new ShowcaseCoordinate { Latitude = row * 10 + column };
+        return new ShowcasePathGraph { Addresses = addresses, Coordinates = coordinates };
+    }
+}
+
+public sealed class ShowcaseAddressBook : List<ShowcasePathAddress>
+{
+    public ShowcasePathAddress? Home { get; set; }
+}
+
+public sealed class ShowcasePathAddress
+{
+    public string Street { get; set; } = "";
+    public Dictionary<string, string> Notes { get; set; } = [];
+}
+
+public sealed class ShowcaseCoordinate
+{
+    public decimal Latitude { get; set; }
+}

@@ -1,0 +1,9 @@
+// GetAs fills destination members whose paths match stored paths.
+{
+    using var reader = customers.Readers.Open();
+    if (reader.Read())
+    {
+        ShowcaseCustomerSummary summary = customers.GetAs<ShowcaseCustomerSummary>(reader.ID);
+        Console.WriteLine($"{summary.Code}: {summary.Region}");
+    }
+}

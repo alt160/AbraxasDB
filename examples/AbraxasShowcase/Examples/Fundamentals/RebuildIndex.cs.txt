@@ -1,0 +1,22 @@
+string recordBaseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AbraxasExamples", "RebuildIndex");
+Directory.CreateDirectory(recordBaseDirectory);
+ulong id;
+using (RecordBase recordBase = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase"))
+{
+    RecordStore<ShowcaseCustomer> customers = recordBase.CreateOrOpenStore<ShowcaseCustomer>("customers", "Showcase customers");
+    id = customers.Put(new ShowcaseCustomer { Code = "REBUILD-1", Name = "Index lifecycle", Region = "West" });
+    customers.CreateIndex(customer => customer.Code, IndexDirection.Ascending);
+
+    // Removing this search path does not remove or rewrite the stored customer.
+    customers.RemoveIndex(".Code");
+    Console.WriteLine($"Still readable by RecordID: {customers.Get(id)?.Code}");
+
+    // Recreate the index from the intact records; no record migration is involved.
+    customers.CreateIndex(customer => customer.Code, IndexDirection.Ascending);
+}
+using (RecordBase reopened = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase"))
+{
+    RecordStore<ShowcaseCustomer> customers = reopened.OpenStore<ShowcaseCustomer>("customers");
+    Console.WriteLine($"Same RecordID after reopen: {customers.Get(id)?.Code}");
+    Console.WriteLine($"Code lookup after rebuild: {customers.GetOrDefault(".Code", "REBUILD-1")?.Name}");
+}

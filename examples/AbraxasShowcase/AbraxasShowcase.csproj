@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../AbraxasEdition.props" />
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PlatformTarget>x64</PlatformTarget>
+    <IsPackable>false</IsPackable>
+    <ApplicationIcon>Assets/AbraxasDB.ico</ApplicationIcon>
+    <AbraxasPackageVersion Condition="'$(AbraxasPackageVersion)' == ''">1.0.0</AbraxasPackageVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="AbraxasDB" Version="$(AbraxasPackageVersion)" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4078.44" />
+    <EmbeddedResource Include="Web/**/*" LogicalName="showcase.web/%(RecursiveDir)%(Filename)%(Extension)" />
+    <EmbeddedResource Include="Scenarios/**/*.cs;Groups/**/*.cs" />
+    <EmbeddedResource Include="Examples/**/*.txt" WithCulture="false" />
+  </ItemGroup>
+  <Target Name="ExcludeUnusedWebViewWpf" BeforeTargets="ResolveAssemblyReferences">
+    <ItemGroup><Reference Remove="@(Reference)" Condition="'%(Reference.Filename)' == 'Microsoft.Web.WebView2.Wpf'" /></ItemGroup>
+  </Target>
+</Project>

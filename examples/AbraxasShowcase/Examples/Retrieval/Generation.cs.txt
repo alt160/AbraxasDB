@@ -1,0 +1,41 @@
+string recordBaseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AbraxasExamples", "CustomerOrders");
+using var context = new ShowcaseCustomerOrderContext(recordBaseDirectory);
+RecordStore<ShowcaseCustomer> customers = context.Customers;
+RecordStore<ShowcaseOrder> orders = context.Orders;
+// Change these values, then run setup again to compare behavior at a different scale.
+int customerCount = 100;
+int ordersPerCustomer = 1;
+int randomSeed = 1729;
+
+{
+    var random = new Random(randomSeed);
+    var customerIDs = new List<ulong>(customerCount);
+    string[] regions = ["West", "Northeast", "South", "Midwest", "International"];
+    string[] statuses = ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"];
+
+    for (int index = 0; index < customerCount; index++)
+    {
+        customerIDs.Add(customers.Put(new ShowcaseCustomer
+        {
+            Code = $"CUS-{index + 1:0000000}",
+            Name = $"Customer {index + 1:0000000}",
+            Region = regions[index % regions.Length],
+            Tags = [index % 2 == 0 ? "priority" : "standard", "generated"]
+        }));
+    }
+
+    for (int customerIndex = 0; customerIndex < customerIDs.Count; customerIndex++)
+    {
+        for (int orderIndex = 0; orderIndex < ordersPerCustomer; orderIndex++)
+        {
+            orders.Put(new ShowcaseOrder
+            {
+                Number = $"SO-{customerIndex + 1:0000000}-{orderIndex + 1:00}",
+                CustomerID = customerIDs[customerIndex],
+                OrderedAt = new DateTime(2026, 1, 1).AddDays(random.Next(365)),
+                Total = decimal.Round(25m + (decimal)random.NextDouble() * 4975m, 2),
+                Status = statuses[random.Next(statuses.Length)]
+            });
+        }
+    }
+}

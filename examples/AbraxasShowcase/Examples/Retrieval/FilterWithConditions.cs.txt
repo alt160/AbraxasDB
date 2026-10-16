@@ -1,0 +1,11 @@
+// The group setup has already created the customers store and its Region index.
+// The group context above owns the open RecordBase and stores.
+{
+    var named = customers.Where.Prop(customer => customer.Code).EqualTo("CUS-0000001").EndCondition;
+    var condition = customers.Where.Prop(customer => customer.Region).EqualTo("West").And(named).EndCondition;
+    foreach (ulong recordID in customers.IterateRecordIDs(condition).Take(8))
+    {
+        ShowcaseCustomer customer = customers.Get(recordID);
+        Console.WriteLine($"{recordID}: {customer.Code} · {customer.Region}");
+    }
+}

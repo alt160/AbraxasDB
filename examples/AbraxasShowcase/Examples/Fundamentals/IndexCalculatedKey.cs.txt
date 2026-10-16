@@ -1,0 +1,13 @@
+string recordBaseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AbraxasExamples", "IndexCalculatedKey");
+Directory.CreateDirectory(recordBaseDirectory);
+using RecordBase recordBase = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase");
+RecordStore<ShowcaseCustomer> customers = recordBase.CreateOrOpenStore<ShowcaseCustomer>("customers", "Showcase customers");
+
+ulong id = customers.Put(new ShowcaseCustomer { Code = "CALC-1", Name = "Calculated example", Region = "West" });
+
+// The key is derived from two stored members; Abraxas maintains it after later writes.
+var display = customers.Calc.Concat("{.Region}|{.Code}");
+customers.CreateExpressionIndex(display.ForIndexing(tokenSource: "region-code"));
+var condition = customers.Where.Calc(display).EqualTo("West|CALC-1").EndCondition;
+ulong[] matches = customers.IterateRecordIDs(condition).ToArray();
+Console.WriteLine($"Calculated key found inserted RecordID: {matches.SequenceEqual([id])}");

@@ -1,0 +1,8 @@
+<Project>
+  <!-- This distribution contains only OSS source. There is no commercial build switch. -->
+  <Target Name="RequireOssSource" BeforeTargets="CoreCompile;Pack">
+    <Error Condition="$([System.String]::Copy('$(DefineConstants)').Contains('ABRAXAS_COMMERCIAL'))" Text="This distribution contains only the OSS edition." />
+    <Error Condition="$([System.String]::Copy('$(DefineConstants)').Contains('ABRAXAS_DIAGNOSTICS'))" Text="Private diagnostic harnesses are not part of this distribution." />
+    <Error Condition="'$(AbraxasIdentityCompilationCapability)' != ''" Text="Commercial compilation capabilities are not accepted by the OSS distribution." />
+  </Target>
+</Project>

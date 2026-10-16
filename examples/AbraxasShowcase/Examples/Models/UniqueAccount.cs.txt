@@ -1,0 +1,7 @@
+public sealed class ShowcaseUniqueAccount
+{
+    public int AccountNumber { get; set; }
+    public string Login { get; set; } = "";
+    public string Name { get; set; } = "";
+    public string Tenant { get; set; } = "";
+}

@@ -1,0 +1,20 @@
+// The group context above owns the open RecordBase and order store.
+// The accessors are stack-only views over each current row; no ShowcaseOrder is built here.
+{
+    using (var warmup = orders.OpenValuesReader(".Total", ".OrderedAt"))
+        while (warmup.Read())
+            _ = (warmup.Get(0).AsDecimal ?? 0m) + (warmup.Get(1).AsDateTime?.Month ?? 0);
+    using var values = orders.OpenValuesReader(".Total", ".OrderedAt");
+    long before = GC.GetAllocatedBytesForCurrentThread();
+    decimal weightedTotal = 0m;
+    int visited = 0;
+    while (values.Read())
+    {
+        decimal total = values.Get(0).AsDecimal ?? 0m;
+        DateTime orderedAt = values.Get(1).AsDateTime ?? default;
+        weightedTotal += total * (orderedAt.Month == 0 ? 1 : orderedAt.Month);
+        visited++;
+    }
+    long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+    Console.WriteLine($"Visited {visited} orders; weighted total {weightedTotal:0.00}; loop allocated {allocated} bytes.");
+}

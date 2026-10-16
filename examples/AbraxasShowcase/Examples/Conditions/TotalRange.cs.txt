@@ -1,0 +1,6 @@
+// A condition is useful even when this member has no durable index.
+{
+    var condition = orders.Where.Prop(order => order.Total).Between(25m, 5000m).EndCondition;
+    foreach (ulong recordID in orders.IterateRecordIDs(condition).Take(8))
+        Console.WriteLine(orders.Get(recordID).Total);
+}

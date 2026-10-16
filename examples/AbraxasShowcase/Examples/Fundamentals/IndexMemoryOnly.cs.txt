@@ -1,0 +1,19 @@
+string recordBaseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AbraxasExamples", "IndexMemoryOnly");
+Directory.CreateDirectory(recordBaseDirectory);
+// Only the index is memory-only. The stored customer, including Name, remains durable.
+// Avoiding a durable index is not by itself a way to keep a sensitive value off disk.
+using (RecordBase recordBase = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase"))
+{
+    RecordStore<ShowcaseCustomer> customers = recordBase.CreateOrOpenStore<ShowcaseCustomer>("customers", "Showcase customers");
+    ulong id = customers.Put(new ShowcaseCustomer { Code = "MEM-1", Name = "Transient example", Region = "West" });
+    customers.CreateMemoryIndex(customer => customer.Name, IndexDirection.Ascending);
+    var condition = customers.Where.PropPath(".Name").AsString.EqualTo("Transient example").EndCondition;
+    ulong[] matches = customers.IterateRecordIDs(condition).ToArray();
+    Console.WriteLine($"Memory index available: {customers.GetIndexes(useMemoryIndex: true).Any(index => index.Backend.KeyPath == ".Name")}");
+    Console.WriteLine($"Index found inserted RecordID: {matches.SequenceEqual([id])}");
+}
+using (RecordBase reopened = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase"))
+{
+    RecordStore<ShowcaseCustomer> customers = reopened.OpenStore<ShowcaseCustomer>("customers");
+    Console.WriteLine($"Memory index absent after reopen: {!customers.GetIndexes(useMemoryIndex: true).Any(index => index.Backend.KeyPath == ".Name")}");
+}

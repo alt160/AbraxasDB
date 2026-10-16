@@ -1,0 +1,69 @@
+.scenario-code-editor {
+  position: relative;
+  min-height: 250px;
+  max-height: 570px;
+  border: 1px solid #474747;
+  border-radius: 7px;
+  overflow: hidden;
+  background: #1e1e1e;
+}
+
+.scenario-code-editor .editor-fallback {
+  position: absolute;
+  inset: 0;
+  max-height: none;
+  border: 0;
+  border-radius: 0;
+}
+
+.scenario-code-editor.monaco-ready .editor-fallback {
+  display: none;
+}
+
+.scenario-code-editor .monaco-editor,
+.scenario-code-editor .overflow-guard {
+  border-radius: 7px;
+}
+
+.source-copy-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 2px 9px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.source-copy-bar .copy-source {
+  padding: 7px 11px;
+  white-space: nowrap;
+}
+
+.copy-source.copied,
+#copy-complete-example.copied,
+#copy-group-source.copied {
+  border-color: var(--accent);
+  color: color-mix(in srgb, var(--accent) 75%, white);
+}
+
+.work-section-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 760px) {
+  .source-copy-bar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .work-section-actions {
+    align-items: flex-end;
+    flex-direction: column;
+    padding: 10px 0;
+  }
+}

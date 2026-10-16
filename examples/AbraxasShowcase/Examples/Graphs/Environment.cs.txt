@@ -1,0 +1,23 @@
+// One owner holds all three stores and their RecordBase for this graph session.
+public sealed class ShowcaseGraphContext : IDisposable
+{
+    private readonly RecordBase recordBase;
+    public RecordStore<ShowcaseGraphCustomer> Customers { get; }
+    public RecordStore<ShowcaseGraphOrder> Orders { get; }
+    public RecordStore<ShowcaseGraphLine> Lines { get; }
+
+    /// <summary>Opens the graph RecordBase and retains its three stores and child-selection index.<br/></summary>
+    /// <param name="directory">Application-owned folder containing this RecordBase file set.<br/></param>
+    public ShowcaseGraphContext(string directory)
+    {
+        Directory.CreateDirectory(directory);
+        recordBase = RecordBase.CreateOrOpen(directory, "showcase");
+        Customers = recordBase.CreateOrOpenStore<ShowcaseGraphCustomer>("graph-customers", "Graph customers");
+        Orders = recordBase.CreateOrOpenStore<ShowcaseGraphOrder>("graph-orders", "Graph orders");
+        Lines = recordBase.CreateOrOpenStore<ShowcaseGraphLine>("graph-lines", "Graph order lines");
+        Orders.CreateIndex(order => order.CustomerID, IndexDirection.Ascending);
+    }
+
+    /// <summary>Closes the RecordBase when all graph reads and writes have finished.<br/></summary>
+    public void Dispose() => recordBase.Dispose();
+}

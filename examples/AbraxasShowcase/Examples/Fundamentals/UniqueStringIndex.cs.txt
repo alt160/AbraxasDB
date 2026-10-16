@@ -1,0 +1,33 @@
+string recordBaseDirectory = Path.Combine(
+    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+    "AbraxasExamples", "UniqueStringIndex");
+Directory.CreateDirectory(recordBaseDirectory);
+
+ulong originalId;
+bool duplicateRejected = false;
+using (RecordBase recordBase = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase"))
+{
+    RecordStore<ShowcaseUniqueAccount> accounts = recordBase.CreateOrOpenStore<ShowcaseUniqueAccount>(
+        "accounts", "Unique account examples");
+    // This ordinary string index compares exact keys; case-insensitive uniqueness is a separate text-index choice.
+    accounts.CreateIndex(account => account.Login, IndexDirection.Ascending, unique: true);
+    originalId = accounts.Put(new ShowcaseUniqueAccount { AccountNumber = 1001, Login = "ada", Name = "Ada" });
+    accounts.Put(new ShowcaseUniqueAccount { AccountNumber = 1002, Login = "grace", Name = "Grace" });
+    try
+    {
+        accounts.Put(new ShowcaseUniqueAccount { AccountNumber = 9999, Login = "ada", Name = "Duplicate" });
+    }
+    catch (IndexContractException error) when (error.FailureKind == IndexContractFailureKind.UniqueConstraint)
+    {
+        duplicateRejected = true;
+    }
+}
+
+using (RecordBase reopened = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase"))
+{
+    RecordStore<ShowcaseUniqueAccount> accounts = reopened.OpenStore<ShowcaseUniqueAccount>("accounts");
+    Console.WriteLine($"Duplicate rejected: {duplicateRejected}");
+    Console.WriteLine($"Original still at its RecordID: {accounts.Get(originalId)?.Name == "Ada"}");
+    Console.WriteLine($"Unique login still resolves: {accounts.GetOrDefault(".Login", "ada")?.Name}");
+    Console.WriteLine($"Different login also resolves: {accounts.GetOrDefault(".Login", "grace")?.Name}");
+}

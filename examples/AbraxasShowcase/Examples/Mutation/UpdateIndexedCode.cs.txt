@@ -1,0 +1,11 @@
+// Replacing the object at its RecordID also maintains the existing Code index.
+{
+    string oldCode = "KEY-OLD-" + Guid.NewGuid().ToString("N");
+    string newCode = "KEY-NEW-" + Guid.NewGuid().ToString("N");
+    ulong recordID = customers.Put(new ShowcaseCustomer { Code = oldCode, Name = "Indexed key change", Region = "West" });
+    ShowcaseCustomer customer = customers.Get(recordID);
+    customer.Code = newCode;
+    customers.Put(recordID, customer);
+    Console.WriteLine($"Old key: {customers.GetOrDefault(".Code", oldCode)?.Name ?? "none"}");
+    Console.WriteLine($"New key: {customers.GetOrDefault(".Code", newCode)?.Name ?? "none"}");
+}

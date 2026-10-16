@@ -1,0 +1,6 @@
+// The group's setup created the durable .Code index before inserting customers.
+// The group context above owns the open RecordBase and stores.
+{
+    ShowcaseCustomer? customer = customers.GetOrDefault(".Code", "CUS-0000001");
+    Console.WriteLine(customer?.Name ?? "No matching customer");
+}

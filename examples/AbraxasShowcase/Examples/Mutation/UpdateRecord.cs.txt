@@ -1,0 +1,9 @@
+// Use a scenario-owned record so this example works regardless of other scenarios' order.
+// The group context above owns the open RecordBase and stores.
+{
+    ulong recordID = customers.Put(new ShowcaseCustomer { Code = "UPDATE-" + Guid.NewGuid().ToString("N"), Name = "Before update", Region = "West" });
+    ShowcaseCustomer updated = customers.Get(recordID);
+    updated.Name = "After update";
+    customers.Put(recordID, updated);
+    Console.WriteLine($"{recordID}: {customers.Get(recordID).Name}");
+}

@@ -1,0 +1,19 @@
+string recordBaseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AbraxasExamples", "ShapeHooks");
+// This owner remains open through generation and the scenario below.
+using var context = new ShowcaseHookContext(recordBaseDirectory);
+RecordStore<ShowcaseHookDocument> documents = context.Documents;
+int documentCount = 24;
+int tokensPerDocument = 2;
+int randomSeed = 1729;
+var random = new Random(randomSeed);
+for (int index = 0; index < documentCount; index++)
+{
+    documents.Put(new ShowcaseHookDocument
+    {
+        Title = $"Document {index + 1:0000000}", PrivateMemo = $"Not stored {index + 1}",
+        PathToken = new ShowcaseHookToken { Code = index + 1 },
+        TypeTokens = Enumerable.Range(0, tokensPerDocument).Select(_ => new ShowcaseHookToken { Code = random.Next(1, 10000) }).ToArray(),
+        Address = new ShowcaseHookAddress { City = index % 2 == 0 ? "Phoenix" : "Seattle", CreatedBy = "Writer instance" },
+        Transient = new ShowcaseHookTransient { RuntimeNote = "Not stored" }
+    });
+}

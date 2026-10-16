@@ -1,0 +1,8 @@
+// No NameLength property is stored on ShowcaseCustomer; the derived key is session-only.
+const string nameLengthPath = ".Name.Length";
+if (!customers.TryGetIndex(nameLengthPath, out _, useMemoryIndex: true))
+    customers.CreateMemoryExpressionIndex(nameLengthPath);
+ulong[] idsByLength = customers.IterateRecordIDs(
+    customers.GetIndex(nameLengthPath, useMemoryIndex: true)).ToArray();
+Console.WriteLine($"Indexed names: {idsByLength.Length}");
+Console.WriteLine($"Durable indexes: {customers.GetIndexes().Count() - customers.GetIndexes(useMemoryIndex: true).Count()}");

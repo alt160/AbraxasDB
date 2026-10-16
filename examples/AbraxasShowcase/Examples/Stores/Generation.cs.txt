@@ -1,0 +1,18 @@
+string recordBaseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AbraxasExamples", "Stores");
+using var context = new ShowcaseStoresContext(recordBaseDirectory);
+RecordBase recordBase = context.RecordBase;
+RecordStore<ShowcaseCustomer> customers = context.Customers;
+RecordStore<ShowcaseOrder> orders = context.Orders;
+{
+const int customerCount = 100;
+const int ordersPerCustomer = 1;
+const int randomSeed = 1729;
+
+    var random = new Random(randomSeed);
+    var customerIDs = new List<ulong>(customerCount);
+    for (int index = 0; index < customerCount; index++)
+        customerIDs.Add(customers.Put(new ShowcaseCustomer { Code = $"STORE-{index + 1:000000}", Name = $"Store customer {index + 1:000000}", Region = index % 2 == 0 ? "West" : "East", Tags = ["stores", "generated"] }));
+    for (int customerIndex = 0; customerIndex < customerIDs.Count; customerIndex++)
+        for (int orderIndex = 0; orderIndex < ordersPerCustomer; orderIndex++)
+            orders.Put(new ShowcaseOrder { Number = $"STORE-SO-{customerIndex + 1:000000}-{orderIndex + 1:00}", CustomerID = customerIDs[customerIndex], OrderedAt = new DateTime(2026, 1, 1).AddDays(random.Next(365)), Total = decimal.Round(10m + (decimal)random.NextDouble() * 990m, 2), Status = orderIndex % 2 == 0 ? "Open" : "Closed" });
+}

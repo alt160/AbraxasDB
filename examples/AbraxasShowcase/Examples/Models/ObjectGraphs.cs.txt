@@ -1,0 +1,18 @@
+public sealed class ShowcaseGraphCustomer
+{
+    public string Code { get; set; } = "";
+    public string Name { get; set; } = "";
+    public List<ShowcaseGraphOrder>? Orders { get; set; }
+}
+public sealed class ShowcaseGraphOrder
+{
+    public string Number { get; set; } = "";
+    public ulong CustomerID { get; set; }
+    public List<ShowcaseGraphLine>? Lines { get; set; }
+}
+public sealed class ShowcaseGraphLine
+{
+    public ulong ID { get; set; }
+    public string Sku { get; set; } = "";
+    public int Quantity { get; set; }
+}

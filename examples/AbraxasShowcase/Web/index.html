@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; worker-src 'self'; connect-src 'none'"
+    />
+    <title>Abraxas Showcase</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="concept-file-map.css" />
+    <link rel="stylesheet" href="object-explorer.css" />
+    <link rel="stylesheet" href="vs-theme.css" />
+    <link rel="stylesheet" href="code-editor.css" />
+    <link rel="stylesheet" href="group.css" />
+    <link rel="stylesheet" href="scenario-types.css" />
+      <link rel="stylesheet" href="glossary.css" />
+    <link rel="stylesheet" href="what-if.css" />
+    <link rel="stylesheet" href="what-if-remedy.css" />
+    <link rel="stylesheet" href="global-search.css?v=20260924-search2" />
+    <link rel="stylesheet" href="page-output.css" />
+    <link rel="stylesheet" href="vendor/monaco/monaco.css" />
+  </head>
+  <body>
+    <div class="global-toolbar">
+      <span class="global-toolbar-label">ABRAXAS SHOWCASE</span>
+      <div class="global-search" role="search">
+        <label class="visually-hidden" for="global-search-input">Search the Showcase</label>
+        <input id="global-search-input" type="search" role="combobox" aria-autocomplete="list" aria-controls="global-search-results" aria-expanded="false" placeholder="Search groups, scenarios, types, concepts, and code…" autocomplete="off" spellcheck="false" />
+        <span class="global-search-shortcut" aria-hidden="true">Ctrl+K</span>
+        <div id="global-search-results" class="global-search-dropdown" role="listbox" hidden></div>
+      </div>
+      <span class="global-toolbar-hint">Search from any page</span>
+    </div>
+    <aside class="rail">
+      <div class="brand">
+        <img class="brand-logo" src="assets/AbraxasDB.png" alt="Abraxas" />
+        <div><strong>Abraxas</strong><small>EXECUTABLE SHOWCASE</small></div>
+      </div>
+      <div class="rail-content" id="rail-content">
+      <div class="rail-label">WORKSPACE</div>
+      <button class="nav active" data-view="home">
+        <span>01</span>
+        <div>Welcome<small>Purpose and orientation</small></div>
+      </button>
+      <button class="nav" data-view="catalog">
+        <span>02</span>
+        <div>Examples catalog<small>Groups and code reference</small></div>
+      </button>
+      <button class="nav" data-view="types">
+        <span>03</span>
+        <div>Scenario types<small>Persisted domain definitions</small></div>
+      </button>
+      <section class="workspace-accordion" id="what-if-navigation">
+        <button class="nav workspace-accordion-toggle" id="what-if-toggle" type="button" aria-expanded="false" aria-controls="what-if-children">
+          <span>04</span>
+          <div>What happens if…<small>Contracts and common mistakes</small></div>
+          <span class="workspace-accordion-chevron" aria-hidden="true"></span>
+        </button>
+        <div class="workspace-accordion-children collapsed" id="what-if-children" aria-hidden="true" inert><div class="workspace-accordion-inner" id="what-if-links"></div></div>
+      </section>
+      <div class="rail-label scenarios-label">SCENARIOS<small>Suggested path: top to bottom as concepts build.</small></div>
+      <nav
+        id="category-navigation"
+        class="category-navigation"
+        aria-label="Scenario categories"
+      ></nav>
+      </div>
+      <div class="engine">
+        <i></i>
+        <div>Local execution<small>Stable public Abraxas APIs</small></div>
+      </div>
+    </aside>
+    <div id="rail-resizer" class="rail-resizer" role="separator" aria-label="Resize scenario navigation" aria-orientation="vertical" aria-valuemin="210" aria-valuemax="480" aria-valuenow="280" tabindex="0" title="Drag to resize the navigation rail. Use arrow keys for fine adjustment."></div>
+    <div class="shell">
+      <header class="app-header">
+        <div class="header-navigation">
+          <div class="history-controls" role="group" aria-label="Page history">
+            <button
+              id="navigation-back"
+              class="history-button"
+              type="button"
+              aria-label="Go back"
+              title="Back (Alt+Left)"
+              disabled
+            >
+              ←
+            </button>
+            <button
+              id="navigation-forward"
+              class="history-button"
+              type="button"
+              aria-label="Go forward"
+              title="Forward (Alt+Right)"
+              disabled
+            >
+              →
+            </button>
+          </div>
+          <div class="header-location">
+            <nav
+              id="breadcrumbs"
+              class="breadcrumbs"
+              aria-label="Breadcrumb"
+            ></nav>
+            <h1 id="page-title">Welcome to Abraxas Showcase</h1>
+          </div>
+        </div>
+        <div class="page-actions" role="group" aria-label="Page output">
+          <button id="save-page-html" class="secondary" type="button" title="Save this page as one self-contained HTML file">Save HTML</button>
+          <button id="save-all-html" class="secondary" type="button" title="Save all instructional pages as one self-contained HTML file">Save all HTML</button>
+          <button id="print-page" class="secondary" type="button" title="Print this page or save it as PDF">Print</button>
+        </div>
+        <div id="dataset-pill" class="dataset-pill">Starting closed…</div>
+      </header>
+      <main id="content">
+        <div class="loading">Connecting to the compiled scenario host…</div>
+      </main>
+      <footer>
+        <span id="status">Ready</span>
+        <div id="footer-context" class="footer-context">
+          <span class="footer-empty-context">No group loaded</span>
+        </div>
+        <span id="footer-metrics">Waiting for first action</span>
+      </footer>
+    </div>
+    <div
+      id="explorer-lightbox-backdrop"
+      class="explorer-lightbox-backdrop"
+      hidden
+    ></div>
+    <div
+      id="creation-lightbox"
+      class="creation-lightbox"
+      hidden
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="creation-title"
+    >
+      <div class="creation-backdrop"></div>
+      <section class="creation-dialog">
+        <div class="creation-dialog-head">
+          <div>
+            <p id="creation-eyebrow" class="eyebrow">GROUP SETUP</p>
+            <h2 id="creation-title">Prepare scenario group</h2>
+          </div>
+        </div>
+        <div id="creation-dialog-body" class="creation-dialog-body"></div>
+        <div class="creation-dialog-actions">
+          <button id="cancel-creation" class="secondary" type="button">
+            Cancel
+          </button>
+          <button id="accept-creation" class="primary" type="button">
+            Run Setup
+          </button>
+        </div>
+      </section>
+    </div>
+    <div
+      id="concept-lightbox"
+      class="concept-lightbox"
+      hidden
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="concept-title"
+    >
+      <div class="concept-backdrop"></div>
+      <section class="concept-dialog">
+        <div class="concept-dialog-head">
+          <div>
+            <p class="eyebrow">ABRAXAS CONCEPT</p>
+            <h2 id="concept-title"></h2>
+          </div>
+          <button
+            id="concept-close-icon"
+            class="concept-close-icon"
+            type="button"
+            aria-label="Close concept details"
+          >
+            ×
+          </button>
+        </div>
+        <div id="concept-dialog-body" class="concept-dialog-body"></div>
+        <div class="concept-dialog-actions">
+          <button id="concept-close" class="primary" type="button">
+            Close
+          </button>
+        </div>
+      </section>
+    </div>
+    <section
+      id="type-definition-popover"
+      class="type-definition-popover"
+      popover="auto"
+      aria-labelledby="type-definition-title"
+    >
+      <div class="type-definition-head">
+        <div>
+          <p class="eyebrow">PERSISTED DOMAIN TYPE</p>
+          <h2 id="type-definition-title"></h2>
+        </div>
+      </div>
+      <p
+        id="type-definition-description"
+        class="type-definition-description"
+      ></p>
+      <div
+        id="type-definition-editor"
+        class="scenario-code-editor type-definition-editor"
+        aria-label="Read-only persisted domain type source"
+      ></div>
+      <div class="type-definition-actions">
+        <button id="copy-type-definition" class="secondary" type="button">
+          Copy definition
+        </button>
+        <button id="type-definition-close" class="primary" type="button">
+          Close
+        </button>
+      </div>
+    </section>
+    <section id="what-if-remedy-popover" class="what-if-remedy-popover" popover="auto" aria-labelledby="what-if-remedy-title">
+      <div class="what-if-remedy-head">
+        <div><p class="eyebrow">WHAT TO DO · WORKING EXAMPLE</p><h2 id="what-if-remedy-title"></h2></div>
+      </div>
+      <div class="what-if-remedy-body">
+        <p id="what-if-remedy-explanation"></p>
+        <div id="what-if-remedy-tabs" class="what-if-remedy-tabs" role="tablist" aria-label="Solution examples"></div>
+        <div id="what-if-remedy-editor" class="code-editor" aria-label="Read-only solution code"></div>
+      </div>
+      <div class="what-if-remedy-actions"><button id="what-if-remedy-copy" class="secondary" type="button">Copy code</button><button id="what-if-remedy-close" class="primary" type="button">Close</button></div>
+    </section>
+    <dialog id="commercial-edition-dialog" class="concept-dialog commercial-edition-dialog" aria-labelledby="commercial-edition-title" aria-describedby="commercial-edition-description">
+      <div class="concept-dialog-head">
+        <div>
+          <p class="eyebrow">COMMERCIAL EDITION</p>
+          <h2 id="commercial-edition-title">Commercial library required</h2>
+        </div>
+      </div>
+      <div class="concept-dialog-body">
+        <strong id="commercial-edition-feature"></strong>
+        <p id="commercial-edition-description">This feature requires the commercial Abraxas library. You can still read and copy its example code in the OSS Showcase. Nothing was run or changed.</p>
+        <p>Library switching is not available in this release. Setup instructions will be provided when the commercial edition is available.</p>
+      </div>
+      <form method="dialog" class="concept-dialog-actions">
+        <button id="commercial-edition-close" class="primary" type="submit" autofocus>Continue exploring</button>
+      </form>
+    </dialog>
+    <div id="toast" hidden></div>
+    <aside id="glossary-popover" class="glossary-popover" hidden aria-live="polite"></aside>
+    <!--
+    The showcase UI is intentionally loaded in dependency order. app.js owns only
+    shared runtime state and host communication; feature behavior lives under app/.
+    See app/README.md before adding a page or reusable component.
+  -->
+    <script src="app.js?v=20260924-search"></script>
+    <script src="app/navigation.js?v=20260924-search"></script>
+    <script src="app/page-output-runtime.js"></script>
+    <script src="app/page-output.js"></script>
+    <script src="app/pages/what-if.js"></script>
+    <script src="app/pages/what-if-remedies.js"></script>
+    <script src="app/components/what-if-remedy-popover.js"></script>
+    <script src="app/type-reference.js?v=20260924-search"></script>
+    <script src="app/pages/home.js"></script>
+    <script src="app/pages/group.js"></script>
+    <script src="app/components/group-browser.js"></script>
+    <script src="app/components/group-setup-dialog.js"></script>
+    <script src="app/components/concept-dialog.js"></script>
+    <script src="app/components/commercial-edition-dialog.js"></script>
+    <script src="app/components/glossary.js"></script>
+    <script src="app/components/browser-data.js"></script>
+    <script src="app/pages/catalog.js?v=20260924-search"></script>
+    <script src="app/components/scenario-types.js"></script>
+    <script src="app/pages/scenario.js"></script>
+    <script src="app/components/code-editor.js"></script>
+    <script src="app/components/object-explorer.js"></script>
+    <script src="app/components/rail-resizer.js"></script>
+    <script src="app/components/rail-scroll.js"></script>
+    <script src="app/global-search.js?v=20260924-search2"></script>
+    <script src="app/bootstrap.js?v=20260924-search"></script>
+    <script type="module" src="vendor/monaco/monaco.js"></script>
+  </body>
+</html>

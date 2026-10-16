@@ -1,0 +1,6 @@
+// Setup created the durable Region index; the condition selects its matching records.
+{
+    var condition = customers.Where.Prop(customer => customer.Region).EqualTo("West").EndCondition;
+    foreach (ulong recordID in customers.IterateRecordIDs(condition).Take(8))
+        Console.WriteLine(customers.Get(recordID).Name);
+}

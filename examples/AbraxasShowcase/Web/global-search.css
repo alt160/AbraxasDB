@@ -1,0 +1,38 @@
+body { grid-template-rows: 58px minmax(0, 1fr); }
+.global-toolbar { grid-column: 1 / -1; grid-row: 1; position: relative; z-index: 100; display: grid; grid-template-columns: minmax(160px, 1fr) minmax(280px, 720px) minmax(160px, 1fr); align-items: center; gap: 18px; padding: 8px 20px; border-bottom: 1px solid #414141; background: #202020; }
+.global-toolbar-label { color: #aaa; font-size: 10px; font-weight: 700; letter-spacing: .12em; white-space: nowrap; }
+.global-toolbar-hint { justify-self: end; color: #999; font-size: 11px; white-space: nowrap; }
+.global-search { position: relative; min-width: 0; }
+.global-search input { width: 100%; height: 40px; border: 1px solid #515151; border-radius: 7px; background: #292929; color: #f4f4f4; padding: 0 74px 0 13px; font: inherit; outline: none; transition: border-color var(--motion-fast) ease, box-shadow var(--motion-fast) ease; }
+.global-search input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 24%, transparent); }
+.global-search input::placeholder { color: #aaa; }
+.global-search-shortcut { position: absolute; top: 11px; right: 12px; padding: 1px 5px; border: 1px solid #555; border-radius: 4px; color: #aaa; font-size: 10px; line-height: 16px; pointer-events: none; }
+.global-search-dropdown { position: absolute; top: calc(100% + 6px); left: 0; right: 0; max-height: min(72vh, 650px); overflow: auto; border: 1px solid #595959; border-radius: 9px; background: #252526; box-shadow: 0 18px 40px #0009; padding: 7px; }
+.global-search-dropdown[hidden] { display: none; }
+.search-group-label { padding: 9px 9px 3px; color: #aaa; font-size: 10px; font-weight: 700; letter-spacing: .11em; }
+.global-search-result { display: grid; width: 100%; min-width: 0; gap: 2px; padding: 9px 11px; border: 1px solid transparent; border-radius: 7px; background: transparent; color: #f2f2f2; font: inherit; text-align: left; cursor: pointer; }
+.global-search-result:hover, .global-search-result.selected, .global-search-result:focus-visible { border-color: color-mix(in srgb, var(--accent) 55%, #555); background: color-mix(in srgb, var(--accent) 15%, #292929); outline: none; }
+.global-search-result-title { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; font-weight: 700; }
+.global-search-result-title small { color: var(--muted); font-size: 10px; font-weight: 500; white-space: nowrap; }
+.global-search-result-subtitle, .global-search-result-match { color: #aaa; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.global-search-result-match { color: color-mix(in srgb, var(--accent) 45%, #bbb); }
+.global-search-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 6px 2px 0; padding: 8px 10px 3px; border-top: 1px solid #454545; color: #aaa; font-size: 11px; }
+.global-search-footer button { border: 0; background: transparent; color: var(--accent); font: inherit; cursor: pointer; }
+.global-search-empty { padding: 16px 12px; color: #bbb; font-size: 12px; }
+.rail { grid-column: 1; grid-row: 2; }
+.rail-resizer { grid-column: 2; grid-row: 2; }
+.shell { grid-column: 3; grid-row: 2; }
+.rail, .shell { height: 100%; min-height: 0; }
+.search-page { display: grid; gap: 17px; }
+.search-page-intro { border-left: 3px solid var(--accent); }
+.search-page-intro h2 { margin-bottom: 5px; }
+.search-page-group { display: grid; gap: 7px; }
+.search-page-group h3 { margin: 0 0 2px; font-size: 15px; }
+.search-page-group .global-search-result { border: 1px solid #484848; background: #252525; }
+.search-page-group .global-search-result:hover, .search-page-group .global-search-result:focus-visible { background: color-mix(in srgb, var(--accent) 15%, #292929); }
+.search-page-empty { padding: 26px; border: 1px solid #444; border-radius: 8px; color: #bbb; }
+.catalog-entry.search-target, .type-reference-card.search-target { border-color: var(--accent); box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+@media (max-width: 1200px) { .start-here { grid-template-columns: minmax(0, 1fr); } .start-here ol { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 960px) { .global-toolbar { grid-template-columns: minmax(0, 1fr); padding-inline: 12px; } .global-toolbar-label, .global-toolbar-hint { display: none; } }
+@media (prefers-reduced-motion: reduce) { .global-search input { transition: none; } }

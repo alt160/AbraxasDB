@@ -1,0 +1,7 @@
+// Delete reports whether a record existed at the requested RecordID.
+{
+    ulong recordID = customers.Put(new ShowcaseCustomer { Code = "DELETE-TWICE-" + Guid.NewGuid().ToString("N"), Name = "Delete twice" });
+    bool first = customers.Delete(recordID);
+    bool second = customers.Delete(recordID);
+    Console.WriteLine($"First delete: {first}; second delete: {second}");
+}

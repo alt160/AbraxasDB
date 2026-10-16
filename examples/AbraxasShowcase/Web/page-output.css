@@ -1,0 +1,147 @@
+/* Standalone page document. Every rule is scoped so loading this sheet does not alter the live Showcase. */
+.export-document {
+  --ink: #18232f;
+  --muted: #536274;
+  --rule: #d2dbe5;
+  box-sizing: border-box;
+  display: block;
+  width: auto;
+  min-width: 0;
+  height: auto;
+  overflow: visible;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 32px 38px;
+  background: #fff;
+  color: var(--ink);
+  font: 14px/1.5 "Segoe UI", Arial, sans-serif;
+}
+.export-document *, .export-document *::before, .export-document *::after { box-sizing: border-box; }
+.export-document main, .export-document main * { min-width: 0; max-height: none; overflow: visible; transform: none; animation: none; }
+.export-document main { display: block; width: 100%; padding: 0; margin: 0; }
+.export-document [hidden], .export-document .export-button, .export-document .disclosure-chevron,
+.export-document .catalog-entry-chevron, .export-document .catalog-category-chevron { display: none !important; }
+.export-document h1, .export-document h2, .export-document h3, .export-document h4 { color: var(--ink); line-height: 1.2; margin: 0 0 10px; }
+.export-document h1 { font-size: 27px; }
+.export-document h2 { font-size: 22px; }
+.export-document h3 { font-size: 17px; }
+.export-document p { margin: 0 0 12px; }
+.export-document small, .export-document .eyebrow, .export-document .source-copy-bar,
+.export-document .explorer-note, .export-document .tag, .export-document .type-setup-note { color: var(--muted); }
+.export-document .eyebrow { display: block; color: var(--export-accent); font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.export-document .export-heading { display: block; width: 100%; padding: 0 0 14px; margin: 0 0 26px; border-bottom: 3px solid var(--export-accent); }
+.export-document .export-heading small { font-size: 11px; letter-spacing: .05em; }
+.export-document .export-heading h1 { margin: 5px 0 0; }
+.export-document .welcome-page, .export-document .scenario-workspace, .export-document .group-workspace,
+.export-document .catalog-workspace, .export-document .type-reference-page, .export-document .what-if-page { display: block; width: 100%; margin: 0; padding: 0; }
+.export-document .welcome-hero, .export-document .scenario-banner, .export-document .group-banner,
+.export-document .catalog-intro, .export-document .type-reference-intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(120px, 28%); gap: 20px; align-items: center; }
+.export-document .welcome-logo { display: block; max-width: 100%; max-height: 160px; width: auto; height: auto; object-fit: contain; }
+.export-document .welcome-mark { min-width: 0; }
+.export-document .welcome-grid, .export-document .scenario-intent, .export-document .facts,
+.export-document .proof-facts, .export-document .type-reference-list, .export-document .group-scenario-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.export-document .welcome-grid, .export-document .home-state, .export-document .scenario-intent,
+.export-document .work-section, .export-document .group-scenarios, .export-document .type-reference-list,
+.export-document .catalog-results { margin-top: 18px; }
+.export-document .scenario-group-state { display: block; margin-top: 18px; border: 1px solid var(--rule); border-left: 3px solid var(--export-accent); border-radius: 6px; padding: 14px; }
+.export-document .scenario-group-state > div { display: grid; gap: 4px; }
+.export-document .scenario-group-state small, .export-document .home-state small { font-size: 11px; text-transform: uppercase; }
+.export-document section, .export-document article { min-width: 0; }
+.export-document .card, .export-document article, .export-document .scenario-banner,
+.export-document .group-banner, .export-document .work-section, .export-document .home-state,
+.export-document .catalog-category, .export-document .type-reference-card, .export-document .what-if-card,
+.export-document .result, .export-document .proof-summary { border: 1px solid var(--rule); border-radius: 6px; padding: 14px; background: #fff; }
+.export-document .scenario-banner, .export-document .group-banner, .export-document .work-section,
+.export-document .catalog-category, .export-document .type-reference-card { border-left: 3px solid var(--export-accent); }
+.export-document .scenario-intent article { margin: 0; }
+.export-document .scenario-intent small, .export-document .fact span, .export-document .proof-facts span { display: block; color: var(--muted); font-size: 11px; text-transform: uppercase; }
+.export-document .tag, .export-document .catalog-tags i { display: inline-block; padding: 2px 7px; margin: 2px 4px 2px 0; border: 1px solid var(--rule); border-radius: 4px; font-size: 11px; font-style: normal; }
+.export-document .facts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.export-document .fact { border: 1px solid var(--rule); padding: 8px 10px; }
+.export-document .fact b { display: block; }
+.export-document .disclosure, .export-document .disclosure-body, .export-document .source-disclosure { display: block; height: auto; max-height: none; overflow: visible; }
+.export-document .disclosure-body { padding: 8px 0 0; }
+.export-document .work-section-head, .export-document .source-toggle { display: block; border-bottom: 1px solid var(--rule); padding: 0 0 8px; }
+.export-document .export-heading-control { display: block; font-weight: 600; color: var(--ink); }
+.export-document button.export-action { font: inherit; cursor: pointer; color: var(--export-accent); border: 1px solid var(--rule); border-radius: 5px; background: #f4f7fa; padding: 6px 10px; }
+.export-document button.export-action:hover, .export-document button.export-action:focus-visible { border-color: var(--export-accent); outline: 2px solid transparent; }
+.export-document .disclosure-toggle.export-action, .export-document .catalog-entry-toggle.export-action,
+.export-document .catalog-category-toggle.export-action { display: block; width: 100%; padding: 0 0 8px; text-align: left; color: var(--ink); background: transparent; border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; }
+.export-document .disclosure-toggle.export-action .disclosure-chevron,
+.export-document .catalog-entry-toggle.export-action .catalog-entry-chevron,
+.export-document .catalog-category-toggle.export-action .catalog-category-chevron { display: inline !important; color: var(--export-accent); margin-right: 5px; }
+.export-document .disclosure-toggle.export-action > span, .export-document .catalog-entry-toggle.export-action > span,
+.export-document .catalog-category-toggle.export-action > span { display: inline-block; vertical-align: top; }
+.export-document .export-heading-control > span { display: block; }
+.export-document .export-heading-control small, .export-document .export-heading-control strong,
+.export-document .catalog-entry-heading em { display: block; }
+.export-document .home-state > div { display: grid; gap: 4px; }
+.export-document .source-disclosure { padding: 12px; border: 1px solid var(--rule); border-radius: 5px; margin: 12px 0; }
+.export-document .source-copy-bar { font-size: 11px; margin: 6px 0; }
+.export-document .export-code, .export-document pre, .export-document code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: #162a3c;
+  font: 12px/1.5 Consolas, "Cascadia Code", monospace;
+}
+.export-document .export-code, .export-document pre { display: block; width: 100%; margin: 8px 0 14px; padding: 12px; background: #f4f7fa; border: 1px solid var(--rule); border-radius: 5px; }
+.export-document .type-reference-card, .export-document .catalog-entry, .export-document .catalog-category { margin: 0 0 10px; }
+.export-document .catalog-entry-body, .export-document .catalog-category-body { display: block; padding: 8px 0 0; }
+.export-document .catalog-count, .export-document .type-reference-count { text-align: right; }
+.export-document .type-reference-count strong, .export-document .catalog-count strong { display: block; font-size: 30px; }
+.export-document .type-reference-uses { border-top: 1px solid var(--rule); padding-top: 6px; }
+.export-document .type-reference-uses small { display: block; font-weight: 700; }
+.export-document .type-scenario-pills { display: none; }
+.export-document .tree-root, .export-document .node-row, .export-document .browser-grid,
+.export-document .browser-table, .export-document table { width: 100%; max-width: 100%; }
+.export-document .node-row { display: grid; grid-template-columns: minmax(100px, 22%) minmax(120px, 24%) minmax(0, 1fr); gap: 8px; border-bottom: 1px solid var(--rule); padding: 5px 0; }
+.export-document table { border-collapse: collapse; }
+.export-document th, .export-document td { border-bottom: 1px solid var(--rule); padding: 5px 7px; text-align: left; overflow-wrap: anywhere; }
+.export-document img { max-width: 100%; height: auto; }
+.export-document .proof-status.passed { border-left: 3px solid #409a25; padding-left: 10px; }
+.export-document .proof-status.failed { border-left: 3px solid #bc3c3c; padding-left: 10px; }
+.export-document .glossary-term { text-decoration: underline dotted var(--export-accent); text-underline-offset: 3px; cursor: help; }
+.export-document .export-tooltip { position: fixed; z-index: 100; width: min(330px, calc(100vw - 24px)); padding: 14px; background: #fff; color: var(--ink); border: 1px solid var(--export-accent); border-radius: 6px; box-shadow: 0 12px 30px #14243b30; }
+.export-document .export-tooltip strong { display: block; margin-bottom: 7px; }
+.export-document .export-tooltip p { margin: 0 0 8px; }
+.export-document .export-dialog { position: fixed; width: min(760px, calc(100vw - 32px)); max-height: calc(100vh - 32px); padding: 0; overflow: auto; color: var(--ink); background: #fff; border: 1px solid var(--rule); border-top: 3px solid var(--export-accent); border-radius: 8px; box-shadow: 0 20px 60px #14243b40; }
+.export-document .export-dialog:not([open]) { display: none; }
+.export-document .export-dialog::backdrop { background: #0b18298c; }
+.export-document .export-dialog-head { position: sticky; top: 0; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 15px 18px; background: #fff; border-bottom: 1px solid var(--rule); }
+.export-document .export-dialog-head h2 { margin: 0; }
+.export-document .export-dialog-head .export-close { flex: none; color: var(--ink); font-size: 22px; line-height: 1; border: 0; background: transparent; cursor: pointer; }
+.export-document .export-dialog-content { padding: 18px; }
+.export-document .export-dialog .export-code { max-height: 55vh; overflow: auto; }
+.export-document .export-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+.export-document .export-tabs button { color: var(--ink); padding: 5px 9px; border: 1px solid var(--rule); border-radius: 5px; background: #f4f7fa; cursor: pointer; }
+.export-document .export-tabs button[aria-selected="true"] { background: var(--export-accent); color: #fff; border-color: var(--export-accent); }
+.export-document .export-detail-card { margin: 10px 0; padding: 12px; border: 1px solid var(--rule); border-left: 3px solid var(--export-accent); border-radius: 5px; }
+.export-document .export-detail-card h3 { margin-bottom: 4px; }
+.export-document .export-detail-card code { display: block; margin-bottom: 7px; }
+.export-collection .export-cover { padding: 10px 0 25px; }
+.export-collection .export-cover > small { color: var(--export-accent); font-weight: 700; letter-spacing: .12em; }
+.export-collection .export-cover h1 { margin: 8px 0 14px; font-size: 36px; }
+.export-collection .export-cover h2 { margin-top: 26px; border-top: 1px solid var(--rule); padding-top: 14px; }
+.export-collection .export-toc { columns: 2; column-gap: 36px; padding-left: 22px; }
+.export-collection .export-toc li { break-inside: avoid; margin: 0 0 7px; }
+.export-collection .export-toc a { color: var(--export-accent); text-decoration: none; }
+.export-collection .export-page { margin: 42px 0 0; padding-top: 20px; border-top: 1px solid var(--rule); }
+@media (max-width: 640px) {
+  .export-document { padding: 20px; }
+  .export-document .welcome-hero, .export-document .scenario-banner, .export-document .group-banner,
+  .export-document .catalog-intro, .export-document .type-reference-intro,
+  .export-document .welcome-grid, .export-document .scenario-intent,
+  .export-document .type-reference-list, .export-document .group-scenario-list { grid-template-columns: 1fr; }
+}
+@media print {
+  @page { margin: 16mm; }
+  .export-document { max-width: none; padding: 0; margin: 0; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .export-document .card, .export-document article, .export-document .fact,
+  .export-document .type-reference-card, .export-document .catalog-entry { break-inside: avoid-page; }
+  .export-document .export-code, .export-document pre { break-inside: auto; }
+  .export-document .export-dialog, .export-document .export-tooltip, .export-document .what-if-show-how { display: none !important; }
+  .export-document .disclosure-body[hidden], .export-document .catalog-category-body[hidden],
+  .export-document .catalog-entry-body[hidden] { display: block !important; }
+  .export-collection .export-page { break-before: page; margin: 0; padding: 0; border: 0; }
+  .export-collection .export-toc { columns: 2; }
+}

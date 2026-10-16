@@ -1,0 +1,78 @@
+// A developer-owned struct carries exactly the values needed by this calculation.
+// Compare explicit value-reader assembly, automatic GetAs<struct> projection, and full objects.
+{
+    using (var warmValues = orders.OpenValuesReader(".Total", ".OrderedAt", ".CustomerID"))
+        while (warmValues.Read())
+            _ = new ShowcaseOrderAnalysisRow(warmValues.Get(0).AsDecimal ?? 0m,
+                warmValues.Get(1).AsDateTime ?? default, warmValues.Get(2).AsUInt64 ?? 0UL).Score();
+    using (var warmObjects = orders.Readers.Open())
+        while (warmObjects.Read())
+            _ = warmObjects.Get().Total;
+    using (var warmProjected = orders.Readers.Open())
+        while (warmProjected.Read())
+            _ = warmProjected.GetAs<ShowcaseOrderAnalysisRow>().Score();
+    decimal valueScore = 0m;
+    int valueRows = 0;
+    long valueBytes;
+    using (var values = orders.OpenValuesReader(".Total", ".OrderedAt", ".CustomerID"))
+    {
+        long before = GC.GetAllocatedBytesForCurrentThread();
+        while (values.Read())
+        {
+            var row = new ShowcaseOrderAnalysisRow(values.Get(0).AsDecimal ?? 0m,
+                values.Get(1).AsDateTime ?? default, values.Get(2).AsUInt64 ?? 0UL);
+            valueScore += row.Score();
+            valueRows++;
+        }
+        valueBytes = GC.GetAllocatedBytesForCurrentThread() - before;
+    }
+
+    decimal objectScore = 0m;
+    long objectBytes;
+    using (var objects = orders.Readers.Open())
+    {
+        long before = GC.GetAllocatedBytesForCurrentThread();
+        while (objects.Read())
+        {
+            ShowcaseOrder order = objects.Get();
+            objectScore += new ShowcaseOrderAnalysisRow(order.Total, order.OrderedAt, order.CustomerID).Score();
+        }
+        objectBytes = GC.GetAllocatedBytesForCurrentThread() - before;
+    }
+    decimal projectedScore = 0m;
+    long projectedBytes;
+    using (var projected = orders.Readers.Open())
+    {
+        long before = GC.GetAllocatedBytesForCurrentThread();
+        while (projected.Read())
+        {
+            ShowcaseOrderAnalysisRow row = projected.GetAs<ShowcaseOrderAnalysisRow>();
+            projectedScore += row.Score();
+        }
+        projectedBytes = GC.GetAllocatedBytesForCurrentThread() - before;
+    }
+    Console.WriteLine($"Visited {valueRows} orders. Same score: {valueScore == objectScore && valueScore == projectedScore}.");
+    Console.WriteLine($"Observed loop allocations: struct/value {valueBytes} bytes; GetAs<struct> {projectedBytes} bytes; complete objects {objectBytes} bytes.");
+}
+
+public struct ShowcaseOrderAnalysisRow
+{
+    public decimal Total { get; set; }
+    public DateTime OrderedAt { get; set; }
+    public ulong CustomerID { get; set; }
+
+    /// <summary>Copies three selected values into a reference-free row for application analysis.<br/></summary>
+    /// <param name="total">Stored monetary total.<br/></param>
+    /// <param name="orderedAt">Stored order timestamp.<br/></param>
+    /// <param name="customerID">Stored customer RecordID.<br/></param>
+    public ShowcaseOrderAnalysisRow(decimal total, DateTime orderedAt, ulong customerID)
+    {
+        Total = total;
+        OrderedAt = orderedAt;
+        CustomerID = customerID;
+    }
+
+    /// <summary>Combines three stored values without constructing a reference-type row.<br/></summary>
+    /// <returns>Deterministic application-specific score.<br/></returns>
+    public decimal Score() => Total * ((OrderedAt.Month % 4) + 1) + (CustomerID % 7);
+}

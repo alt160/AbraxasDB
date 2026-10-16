@@ -1,0 +1,14 @@
+// OpenUnordered is for complete traversal, not promised order or quickest first result.
+// The group context above owns the open RecordBase and stores.
+{
+    ulong count = 0;
+    var watch = System.Diagnostics.Stopwatch.StartNew();
+    using (var reader = customers.Readers.OpenUnordered())
+        while (reader.Read())
+        {
+            ShowcaseCustomer customer = reader.Get();
+            count++;
+        }
+    watch.Stop();
+    Console.WriteLine($"Read {count} complete customers in {watch.Elapsed.TotalMilliseconds:N2} ms");
+}

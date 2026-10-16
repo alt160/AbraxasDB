@@ -1,0 +1,24 @@
+// Commercial Abraxas edition only. This temporary key is for a disposable demonstration.
+// A real application must store keys securely and resolve old key IDs for the life of its data.
+string recordBaseDirectory = Path.Combine(Path.GetTempPath(), "AbraxasExamples", "EncryptedRoundTrip-" + Guid.NewGuid().ToString("N"));
+Directory.CreateDirectory(recordBaseDirectory);
+byte[] demoKey = RandomNumberGenerator.GetBytes(32);
+var configuration = RecordBaseConfiguration.Default;
+configuration.RecordPayloadEncryption = RecordPayloadEncryptionOptions.AesGcm(_ => demoKey, "demo-v1");
+try
+{
+    ulong id;
+    using (RecordBase recordBase = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase", configuration))
+    {
+        RecordStore<ShowcaseVaultRecord> records = recordBase.CreateOrOpenStore<ShowcaseVaultRecord>("vault", "Protected payload examples");
+        id = records.Put(new ShowcaseVaultRecord { Code = "encrypted", Body = "Demonstration content" });
+    }
+    using (RecordBase reopened = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase", configuration))
+        Console.WriteLine($"Encrypted record reopened: {reopened.OpenStore<ShowcaseVaultRecord>("vault").Get(id)?.Body == "Demonstration content"}");
+}
+finally
+{
+    // The generated key is intentionally not retained; remove only this example's new disposable folder.
+    Directory.Delete(recordBaseDirectory, recursive: true);
+    CryptographicOperations.ZeroMemory(demoKey);
+}

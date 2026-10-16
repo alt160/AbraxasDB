@@ -1,0 +1,10 @@
+// The .PathToken writer stores Code + 1000; its paired reader restores Code.
+// documents belongs to the group context and remains available until that context is disposed.
+{
+    using var reader = documents.Readers.Open();
+    if (reader.Read())
+    {
+        ShowcaseHookDocument document = documents.Get(reader.ID);
+        Console.WriteLine($"{document.Title}: PathToken.Code = {document.PathToken.Code}");
+    }
+}

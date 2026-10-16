@@ -1,0 +1,9 @@
+// GetValues returns only the requested path; no ShowcaseOrder is filled.
+{
+    using var reader = orders.Readers.Open();
+    if (reader.Read())
+    {
+        object? total = orders.GetValues(reader.ID, ".Total")?[0];
+        Console.WriteLine($"Order total: {total}");
+    }
+}

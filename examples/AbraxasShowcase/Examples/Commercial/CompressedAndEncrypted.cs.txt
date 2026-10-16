@@ -1,0 +1,26 @@
+// Commercial Abraxas edition only. The two policies are independent: compress first, then encrypt.
+string recordBaseDirectory = Path.Combine(Path.GetTempPath(), "AbraxasExamples", "CombinedPayload-" + Guid.NewGuid().ToString("N"));
+Directory.CreateDirectory(recordBaseDirectory);
+byte[] demoKey = RandomNumberGenerator.GetBytes(32);
+var configuration = RecordBaseConfiguration.Default;
+configuration.RecordPayloadCompression = RecordPayloadCompressionOptions.Brotli;
+configuration.RecordPayloadCompression.MinimumPayloadBytes = 256;
+configuration.RecordPayloadEncryption = RecordPayloadEncryptionOptions.AesGcm(_ => demoKey, "combined-v1");
+try
+{
+    string body = new('B', 16_000);
+    ulong id;
+    using (RecordBase recordBase = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase", configuration))
+    {
+        RecordStore<ShowcaseVaultRecord> records = recordBase.CreateOrOpenStore<ShowcaseVaultRecord>("vault", "Protected payload examples");
+        id = records.Put(new ShowcaseVaultRecord { Code = "combined", Body = body });
+        Console.WriteLine($"Payloads compressed before encryption: {records.CompressionTelemetry.Snapshot().CompressedWrites}");
+    }
+    using (RecordBase reopened = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase", configuration))
+        Console.WriteLine($"Combined-policy record reopened: {reopened.OpenStore<ShowcaseVaultRecord>("vault").Get(id)?.Body == body}");
+}
+finally
+{
+    Directory.Delete(recordBaseDirectory, recursive: true);
+    CryptographicOperations.ZeroMemory(demoKey);
+}

@@ -1,0 +1,7 @@
+// This visits every identity but never hydrates a customer object.
+{
+    ulong visited = 0;
+    foreach (ulong recordID in customers.IterateRecordIDs()) visited++;
+    ulong maintained = customers.Aggregates.Count();
+    Console.WriteLine($"Visited IDs: {visited}; maintained count: {maintained}");
+}

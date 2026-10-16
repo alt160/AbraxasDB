@@ -1,0 +1,10 @@
+// pathGraphs belongs to the prepared group. #0 selects its first address,
+// then .Street reads only that selected member by the graph's RecordID.
+{
+    using var reader = pathGraphs.Readers.Open();
+    if (reader.Read())
+    {
+        string street = pathGraphs.GetValue<string>(reader.ID, ".Addresses#0.Street");
+        Console.WriteLine($"First address: {street}");
+    }
+}

@@ -1,0 +1,7 @@
+// The stored dictionary returns as a normal Dictionary<string, int> on Get.
+using var reader = profiles.Readers.Open();
+if (reader.Read())
+{
+    Dictionary<string, int> limits = profiles.Get(reader.ID)!.Preferences.Limits;
+    Console.WriteLine($"Daily: {limits["daily"]}; weekly: {limits["weekly"]}");
+}

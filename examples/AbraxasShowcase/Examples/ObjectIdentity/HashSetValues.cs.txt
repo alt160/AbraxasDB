@@ -1,0 +1,7 @@
+// Check set membership; a HashSet's iteration order is not its contract.
+using var reader = profiles.Readers.Open();
+if (reader.Read())
+{
+    HashSet<string> labels = profiles.Get(reader.ID)!.Preferences.Labels;
+    Console.WriteLine($"Generated: {labels.Contains("generated")}; members: {labels.Count}");
+}

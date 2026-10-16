@@ -1,0 +1,14 @@
+// notes was declared and prepared by this group's setup code.
+var note = new ShowcaseIdentityFreeNote
+{
+    Subject = "External identity",
+    Body = "The Abraxas RecordID remains outside this domain object.",
+    CreatedUtc = DateTime.UtcNow
+};
+
+// The returned RecordID can be retained independently of the domain object.
+ulong recordID = notes.Put(note);
+ShowcaseIdentityFreeNote hydrated = notes.Get(recordID);
+
+Console.WriteLine($"RecordID: {recordID}");
+Console.WriteLine($"Domain type: {hydrated.GetType().FullName}");

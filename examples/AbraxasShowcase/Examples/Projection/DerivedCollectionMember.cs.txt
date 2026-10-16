@@ -1,0 +1,14 @@
+// ShowcaseAddressBook inherits List<ShowcasePathAddress> and also owns Home.
+// Home references element zero in the source graph. Both direct paths and a full read retain it.
+{
+    using var reader = pathGraphs.Readers.Open();
+    if (reader.Read())
+    {
+        ulong id = reader.ID;
+        string byPosition = pathGraphs.GetValue<string>(id, ".Addresses#0.Street");
+        string byMember = pathGraphs.GetValue<string>(id, ".Addresses.Home.Street");
+        Console.WriteLine($"#0: {byPosition}; Home: {byMember}");
+        ShowcasePathGraph hydrated = pathGraphs.Get(id)!;
+        Console.WriteLine($"{hydrated.Addresses.Count} addresses; Home is #0: {ReferenceEquals(hydrated.Addresses.Home, hydrated.Addresses[0])}");
+    }
+}

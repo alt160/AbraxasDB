@@ -1,0 +1,29 @@
+// Keep the RecordBase and its store together for this group's working lifetime.
+public sealed class ShowcaseHookContext : IDisposable
+{
+    private readonly RecordBase recordBase;
+    public RecordStore<ShowcaseHookDocument> Documents { get; }
+
+    /// <summary>Opens the group's RecordBase, creates its store, and registers instance-scoped shape hooks before any reads or writes.<br/></summary>
+    /// <param name="directory">Application-owned folder for the named RecordBase file set.<br/></param>
+    public ShowcaseHookContext(string directory)
+    {
+        Directory.CreateDirectory(directory);
+        recordBase = RecordBase.CreateOrOpen(directory, "showcase");
+        Documents = recordBase.CreateOrOpenStore<ShowcaseHookDocument>("hook-documents", "Hook and materialization examples");
+        Documents.SerializationOptions.ExcludedMembers.Add(".PrivateMemo");
+        Documents.SerializationOptions.ExcludedMembers.Add(".Address.CreatedBy");
+        Documents.SerializationOptions.ExcludedTypes.Add(typeof(ShowcaseHookTransient));
+        Documents.SerializationOptions.AddTypeSerializer<ShowcaseHookToken>(value => BitConverter.GetBytes(value.Code));
+        Documents.DeserializationOptions.AddTypeDeserializer<ShowcaseHookToken>(bytes => new ShowcaseHookToken { Code = BitConverter.ToInt32(bytes) });
+        // A path hook takes precedence over the type hook for this property.
+        Documents.SerializationOptions.AddSerializer<ShowcaseHookToken>(".PathToken", value => BitConverter.GetBytes(checked(value.Code + 1000)));
+        Documents.DeserializationOptions.AddDeserializer<ShowcaseHookToken>(".PathToken", bytes => new ShowcaseHookToken { Code = BitConverter.ToInt32(bytes) - 1000 });
+        Documents.SerializationOptions.AddTypeSerializer<ShowcaseContextualPayload>(ShowcaseContextualCodec.Encode);
+        Documents.DeserializationOptions.AddTypeDeserializer<ShowcaseContextualPayload>(ShowcaseContextualCodec.Decode);
+        Documents.DeserializationOptions.AddActivator<ShowcaseHookAddress>(_ => new ShowcaseHookAddress { CreatedBy = "Custom activator" });
+    }
+
+    /// <summary>Closes the RecordBase after all group operations have finished; its store must not be used afterward.<br/></summary>
+    public void Dispose() => recordBase.Dispose();
+}

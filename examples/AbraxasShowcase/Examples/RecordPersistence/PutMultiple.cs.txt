@@ -1,0 +1,9 @@
+// Each Put returns a separate RecordID; the customer type has no identity property.
+{
+    string suffix = Guid.NewGuid().ToString("N");
+    ulong firstID = customers.Put(new ShowcaseCustomer { Code = "PAIR-A-" + suffix, Name = "First", Region = "West" });
+    ulong secondID = customers.Put(new ShowcaseCustomer { Code = "PAIR-B-" + suffix, Name = "Second", Region = "West" });
+    ShowcaseCustomer first = customers.Get(firstID);
+    ShowcaseCustomer second = customers.Get(secondID);
+    Console.WriteLine($"{firstID}: {first.Name}; {secondID}: {second.Name}");
+}

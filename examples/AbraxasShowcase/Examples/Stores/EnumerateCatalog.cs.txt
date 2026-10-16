@@ -1,0 +1,6 @@
+// GetStoreInfos reads the durable store catalog, not each store's records.
+{
+    RecordBase.StoresInfo allStores = recordBase.GetStoreInfos() ?? new RecordBase.StoresInfo();
+    foreach (KeyValuePair<string, RecordBase.StoreInfo> store in allStores)
+        Console.WriteLine($"{store.Key}: {store.Value.Description}");
+}

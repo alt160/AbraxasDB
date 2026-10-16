@@ -1,0 +1,4 @@
+public sealed class ShowcaseCustomerRenamed
+{
+    public string DisplayName { get; set; } = "";
+}

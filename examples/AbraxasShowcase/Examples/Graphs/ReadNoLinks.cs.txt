@@ -1,0 +1,10 @@
+// A scalar list does not need cross-store line hydration.
+// The graph context above owns the open RecordBase and all three stores.
+{
+    using var reader = orders.Readers.Open();
+    if (reader.Read())
+    {
+        ShowcaseGraphOrder order = reader.GetNoLinks();
+        Console.WriteLine($"{order.Number}: Lines hydrated = {order.Lines is not null}");
+    }
+}

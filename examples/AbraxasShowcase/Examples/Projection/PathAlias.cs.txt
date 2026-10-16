@@ -1,0 +1,21 @@
+// The group setup stored ShowcaseCustomer.Name. The app's newer view calls it DisplayName.
+using (var reader = customers.Readers.Open())
+{
+    if (reader.Read())
+    {
+        ulong id = reader.ID;
+        string original = customers.Get(id)!.Name;
+        bool added = customers.Aliases.Add(".Name", ".DisplayName");
+        try
+        {
+            ShowcaseCustomerRenamed renamed = customers.GetAs<ShowcaseCustomerRenamed>(id);
+            Console.WriteLine($"Old Name: {original}; new DisplayName: {renamed.DisplayName}");
+        }
+        finally
+        {
+            // Retire the temporary read compatibility rule when it is no longer needed.
+            if (added) customers.Aliases.Remove(".Name");
+        }
+        Console.WriteLine($"Stored Name is unchanged: {customers.Get(id)!.Name}");
+    }
+}

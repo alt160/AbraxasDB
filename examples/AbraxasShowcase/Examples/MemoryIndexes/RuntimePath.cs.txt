@@ -1,0 +1,10 @@
+// Imagine this path came from a report setting rather than a hard-coded member selector.
+string selectedPath = ".Region";
+if (!customers.TryGetIndex(selectedPath, out _, useMemoryIndex: true))
+    customers.CreateMemoryIndex(new PropPath(selectedPath), IndexDirection.Ascending);
+var west = customers.Where.PropPath(selectedPath).AsString.EqualTo("West").EndCondition;
+ulong[] ids = customers.IterateRecordIDs(west).ToArray();
+Console.WriteLine($"West customers: {ids.Length}");
+Console.WriteLine($"Memory index: {customers.TryGetIndex(selectedPath, out _, useMemoryIndex: true)}");
+// Default index discovery includes memory indexes; compare catalogs to count durable definitions.
+Console.WriteLine($"Durable indexes: {customers.GetIndexes().Count() - customers.GetIndexes(useMemoryIndex: true).Count()}");

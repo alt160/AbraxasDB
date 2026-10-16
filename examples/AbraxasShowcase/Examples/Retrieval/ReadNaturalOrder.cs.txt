@@ -1,0 +1,12 @@
+// The customers store and its sample records came from this group's setup code.
+// The reader visits the source order chosen by Abraxas; this loop requests no sort.
+// The group context above owns the open RecordBase and stores.
+{
+    using var reader = customers.Readers.Open();
+    var firstCustomers = new List<(ulong RecordID, ShowcaseCustomer Customer)>();
+    while (firstCustomers.Count < 8 && reader.Read())
+        firstCustomers.Add((reader.ID, reader.Get()));
+
+    foreach (var (recordID, customer) in firstCustomers)
+        Console.WriteLine($"{recordID}: {customer.Code} · {customer.Name}");
+}

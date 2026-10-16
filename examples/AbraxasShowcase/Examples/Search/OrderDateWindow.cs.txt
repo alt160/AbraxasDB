@@ -1,0 +1,12 @@
+// The group setup has created the orders store and its OrderedAt index.
+// The group context above owns the open RecordBase and stores.
+{
+    DateTime first = new(2026, 1, 1);
+    DateTime last = new(2026, 1, 31);
+    var condition = orders.Where.Prop(order => order.OrderedAt).Between(first, last).EndCondition;
+    foreach (ulong recordID in orders.IterateRecordIDs(condition).Take(8))
+    {
+        ShowcaseOrder order = orders.Get(recordID);
+        Console.WriteLine($"{recordID}: {order.Number} · {order.OrderedAt:d}");
+    }
+}

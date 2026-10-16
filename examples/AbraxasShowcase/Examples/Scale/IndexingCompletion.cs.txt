@@ -1,0 +1,15 @@
+// The group setup already created a durable index on customer Code.
+// PutManyFast returns RecordIDs and an indexing handle. In this build the handle
+// is complete when PutManyFast returns; do not assume an observable indexing delay.
+// The group context above owns the open RecordBase and stores.
+{
+    string code = "INDEX-BATCH-" + Guid.NewGuid().ToString("N");
+    ShowcaseCustomer[] batch = [new() { Code = code, Name = "Index completion sample", Region = "West" }];
+    var outcome = customers.PutManyFast(batch);
+    using var indexing = outcome.IndexingBatch;
+    IndexingBatchSnapshot progress = indexing.GetSnapshot();
+    ShowcaseCustomer? byID = customers.Get(outcome.RecordIds[0]);
+    ShowcaseCustomer? byCode = customers.GetOrDefault(".Code", code);
+    Console.WriteLine($"Completed: {indexing.IsCompleted}; pending: {progress.PendingCount}");
+    Console.WriteLine($"RecordID read: {byID?.Code}; indexed Code read: {byCode?.Code}");
+}

@@ -1,0 +1,20 @@
+// The owner holds the active RecordBase and both stores until the group context ends.
+public sealed class ShowcaseStoresContext : IDisposable
+{
+    public RecordBase RecordBase { get; }
+    public RecordStore<ShowcaseCustomer> Customers { get; }
+    public RecordStore<ShowcaseOrder> Orders { get; }
+
+    /// <summary>Opens one RecordBase and retains its two typed stores for setup and later scenarios.<br/></summary>
+    /// <param name="directory">Application-owned folder for the named RecordBase files.<br/></param>
+    public ShowcaseStoresContext(string directory)
+    {
+        Directory.CreateDirectory(directory);
+        RecordBase = RecordBase.CreateOrOpen(directory, "showcase");
+        Customers = RecordBase.CreateOrOpenStore<ShowcaseCustomer>("customers", "Store examples for customers");
+        Orders = RecordBase.CreateOrOpenStore<ShowcaseOrder>("orders", "Store examples for orders");
+    }
+
+    /// <summary>Closes the RecordBase after all store operations have finished.<br/></summary>
+    public void Dispose() => RecordBase.Dispose();
+}

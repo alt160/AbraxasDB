@@ -1,0 +1,13 @@
+// customers remains open in this group's context.
+RecordPersistedEventArgs? persisted = null;
+customers.RecordPersisted += (_, eventArgs) => persisted = eventArgs;
+
+var customer = new ShowcaseCustomer
+{
+    Code = "EVENT-" + DateTime.UtcNow.Ticks,
+    Name = "Persistence event customer",
+    Region = "West",
+    Tags = ["stores", "events"]
+};
+
+ulong recordID = customers.Put(customer);

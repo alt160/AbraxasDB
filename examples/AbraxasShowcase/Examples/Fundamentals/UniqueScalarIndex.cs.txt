@@ -1,0 +1,32 @@
+string recordBaseDirectory = Path.Combine(
+    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+    "AbraxasExamples", "UniqueScalarIndex");
+Directory.CreateDirectory(recordBaseDirectory);
+
+ulong originalId;
+bool duplicateRejected = false;
+using (RecordBase recordBase = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase"))
+{
+    RecordStore<ShowcaseUniqueAccount> accounts = recordBase.CreateOrOpenStore<ShowcaseUniqueAccount>(
+        "accounts", "Unique account examples");
+    accounts.CreateIndex(account => account.AccountNumber, IndexDirection.Ascending, unique: true);
+    originalId = accounts.Put(new ShowcaseUniqueAccount { AccountNumber = 1001, Login = "ada", Name = "Ada" });
+    accounts.Put(new ShowcaseUniqueAccount { AccountNumber = 1002, Login = "grace", Name = "Grace" });
+    try
+    {
+        accounts.Put(new ShowcaseUniqueAccount { AccountNumber = 1001, Login = "impostor", Name = "Duplicate" });
+    }
+    catch (IndexContractException error) when (error.FailureKind == IndexContractFailureKind.UniqueConstraint)
+    {
+        duplicateRejected = true;
+    }
+}
+
+using (RecordBase reopened = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase"))
+{
+    RecordStore<ShowcaseUniqueAccount> accounts = reopened.OpenStore<ShowcaseUniqueAccount>("accounts");
+    Console.WriteLine($"Duplicate rejected: {duplicateRejected}");
+    Console.WriteLine($"Original still at its RecordID: {accounts.Get(originalId)?.Login == "ada"}");
+    Console.WriteLine($"Unique key still resolves: {accounts.GetOrDefault(".AccountNumber", 1001)?.Name}");
+    Console.WriteLine($"Different number also resolves: {accounts.GetOrDefault(".AccountNumber", 1002)?.Name}");
+}

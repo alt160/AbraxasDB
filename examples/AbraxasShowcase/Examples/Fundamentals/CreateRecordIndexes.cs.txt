@@ -1,0 +1,24 @@
+// Choose the folder and name for this example's RecordBase file set.
+string recordBaseDirectory = Path.Combine(
+    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+    "AbraxasExamples",
+    "RecordIndexes");
+Directory.CreateDirectory(recordBaseDirectory);
+
+using RecordBase recordBase = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase");
+RecordStore<ShowcaseCustomer> customers = recordBase.CreateOrOpenStore<ShowcaseCustomer>(
+    "customers",
+    "Showcase customers");
+
+// Member selectors keep index declarations strongly typed.
+customers.CreateIndex(customer => customer.Code, IndexDirection.Ascending);
+customers.CreateIndex(customer => customer.Region, IndexDirection.Ascending);
+string[] firstDeclaration = customers.GetIndexNames();
+
+// Repeating the same declarations resolves the durable indexes without duplicating them.
+customers.CreateIndex(customer => customer.Code, IndexDirection.Ascending);
+customers.CreateIndex(customer => customer.Region, IndexDirection.Ascending);
+string[] repeatedDeclaration = customers.GetIndexNames();
+
+Console.WriteLine($"Indexes: {string.Join(", ", repeatedDeclaration)}");
+Console.WriteLine($"No duplicates: {firstDeclaration.Order().SequenceEqual(repeatedDeclaration.Order())}");

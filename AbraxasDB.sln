@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11218.70
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AbraxasDB", "src\AbraxasDB\AbraxasDB.csproj", "{7C4F7BE2-CFF8-4F04-B35A-9525A48D34D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AbxIdentityGenerator", "src\AbxIdentityGenerator\AbxIdentityGenerator.csproj", "{967683C4-B9B9-4371-B52B-62A665754E59}"
+EndProject
+Global
+  GlobalSection(SolutionConfigurationPlatforms) = preSolution
+    Release|Any CPU = Release|Any CPU
+    Release|x64 = Release|x64
+  EndGlobalSection
+  GlobalSection(ProjectConfigurationPlatforms) = postSolution
+    {7C4F7BE2-CFF8-4F04-B35A-9525A48D34D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+    {7C4F7BE2-CFF8-4F04-B35A-9525A48D34D3}.Release|Any CPU.Build.0 = Release|Any CPU
+    {7C4F7BE2-CFF8-4F04-B35A-9525A48D34D3}.Release|x64.ActiveCfg = Release|Any CPU
+    {7C4F7BE2-CFF8-4F04-B35A-9525A48D34D3}.Release|x64.Build.0 = Release|Any CPU
+    {967683C4-B9B9-4371-B52B-62A665754E59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+    {967683C4-B9B9-4371-B52B-62A665754E59}.Release|Any CPU.Build.0 = Release|Any CPU
+    {967683C4-B9B9-4371-B52B-62A665754E59}.Release|x64.ActiveCfg = Release|Any CPU
+    {967683C4-B9B9-4371-B52B-62A665754E59}.Release|x64.Build.0 = Release|Any CPU
+  EndGlobalSection
+EndGlobal

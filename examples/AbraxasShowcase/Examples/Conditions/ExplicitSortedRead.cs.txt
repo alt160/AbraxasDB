@@ -1,0 +1,11 @@
+// A requested sort makes the order explicit; natural reader order does not promise this.
+// The group context above owns the open RecordBase and stores.
+{
+    using var reader = customers.Readers.OpenSorted(".Name", descending: true);
+    int shown = 0;
+    while (shown < 8 && reader.Read())
+    {
+        Console.WriteLine($"{reader.ID}: {reader.Get().Name}");
+        shown++;
+    }
+}

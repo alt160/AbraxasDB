@@ -1,0 +1,25 @@
+// Commercial Abraxas edition only. Compression wraps application-record payloads, not index keys.
+string recordBaseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+    "AbraxasExamples", "AdaptivePayloadCompression");
+Directory.CreateDirectory(recordBaseDirectory);
+var configuration = RecordBaseConfiguration.Default;
+configuration.RecordPayloadCompression = RecordPayloadCompressionOptions.Brotli;
+configuration.RecordPayloadCompression.MinimumPayloadBytes = 256;
+configuration.RecordPayloadCompression.MinimumSavingsBytes = 64;
+
+ulong smallId, largeId;
+string largeBody = new('A', 16_000);
+using (RecordBase recordBase = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase", configuration))
+{
+    RecordStore<ShowcaseVaultRecord> records = recordBase.CreateOrOpenStore<ShowcaseVaultRecord>("vault", "Protected payload examples");
+    smallId = records.Put(new ShowcaseVaultRecord { Code = "small", Body = "short" });
+    largeId = records.Put(new ShowcaseVaultRecord { Code = "large", Body = largeBody });
+    RecordPayloadCompressionSnapshot stats = records.CompressionTelemetry.Snapshot();
+    Console.WriteLine($"Compressed writes: {stats.CompressedWrites}; payload bytes saved: {stats.BytesSaved}");
+}
+using (RecordBase reopened = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase", configuration))
+{
+    RecordStore<ShowcaseVaultRecord> records = reopened.OpenStore<ShowcaseVaultRecord>("vault");
+    Console.WriteLine($"Small record intact: {records.Get(smallId)?.Body == "short"}");
+    Console.WriteLine($"Large record intact: {records.Get(largeId)?.Body == largeBody}");
+}

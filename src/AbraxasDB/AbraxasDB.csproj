@@ -1,0 +1,58 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../AbraxasEdition.props" />
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageId>AbraxasDB</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>alt160</Authors>
+    <Copyright>Copyright (c) 2026 alt160</Copyright>
+    <Description>An embedded, .NET-native object recordbase with durable records, maintained indexes, selective value reads, and low-ceremony application types. Open-source edition.</Description>
+    <PackageTags>embedded;database;objects;persistence;indexing;binary;dotnet;low-allocation</PackageTags>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/alt160/AbraxasDB</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/alt160/AbraxasDB</PackageProjectUrl>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <DebugType>portable</DebugType>
+    <EmbedAllSources>true</EmbedAllSources>
+    <Deterministic>true</Deterministic>
+    <PathMap>$(MSBuildProjectDirectory)=/_/src/AbraxasDB</PathMap>
+    <PathMap Condition="'$(ArtifactsPath)' != ''">$(PathMap),$(ArtifactsPath)=/_/artifacts</PathMap>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+    <!-- An export below the private checkout must never inherit that checkout's commit. -->
+    <EnableSourceControlManagerQueries>false</EnableSourceControlManagerQueries>
+    <RepositoryCommit Condition="'$(GITHUB_SHA)' != ''">$(GITHUB_SHA)</RepositoryCommit>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeIdentityRuntime</TargetsForTfmSpecificBuildOutput>
+    <TargetsForTfmSpecificDebugSymbolsInPackage>$(TargetsForTfmSpecificDebugSymbolsInPackage);IncludeIdentitySymbols</TargetsForTfmSpecificDebugSymbolsInPackage>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="BufferStream" Version="1.0.2" />
+    <PackageReference Include="FractalKVS" Version="1.0.1" />
+    <PackageReference Include="Inheto" Version="1.1.0" />
+    <PackageReference Include="LibraDex" Version="1.2.2" />
+    <PackageReference Include="fasterflect" Version="3.0.0" />
+    <PackageReference Include="FastMember" Version="1.5.0" />
+    <ProjectReference Include="../AbxIdentityGenerator/AbxIdentityGenerator.csproj" PrivateAssets="all" />
+    <None Include="../../README.md;../../LICENSE;../../CHANGELOG.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+  <!-- The internal helper ships in this package, never as an unavailable NuGet dependency. -->
+  <Target Name="IncludeIdentityRuntime" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths)" Condition="'%(Filename)' == 'AbxIdentityGenerator' and '%(Extension)' == '.dll'" />
+    </ItemGroup>
+  </Target>
+  <Target Name="IncludeIdentitySymbols" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <TfmSpecificDebugSymbolsFile Include="$(TargetDir)AbxIdentityGenerator.pdb">
+        <TargetFramework>$(TargetFramework)</TargetFramework>
+      </TfmSpecificDebugSymbolsFile>
+    </ItemGroup>
+    <Error Condition="!Exists('$(TargetDir)AbxIdentityGenerator.pdb')" Text="The owned identity helper's portable PDB must be present before packaging." />
+  </Target>
+</Project>

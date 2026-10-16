@@ -1,0 +1,16 @@
+// Both destination types read the same stored record. Member paths that match are filled.
+// A stored member omitted from a destination is not read into it; an unmatched member keeps its default.
+// The group context above owns the open RecordBase and stores.
+{
+    using var reader = customers.Readers.Open();
+    if (reader.Read())
+    {
+        ShowcaseCustomer original = customers.Get(reader.ID)!;
+        ShowcaseCustomerSummary summary = customers.GetAs<ShowcaseCustomerSummary>(reader.ID);
+        ShowcaseCustomerAlternative alternative = customers.GetAs<ShowcaseCustomerAlternative>(reader.ID);
+        Console.WriteLine($"Stored: {original.Code}, {original.Name}, {original.Region}");
+        Console.WriteLine($"Code + Region: {summary.Code}, {summary.Region}");
+        Console.WriteLine($"Name + Region: {alternative.Name}, {alternative.Region}");
+        Console.WriteLine($"Unmatched destination member: {alternative.Unmatched}");
+    }
+}

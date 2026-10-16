@@ -1,0 +1,10 @@
+// The customer link derives Orders from its RecordID and the child CustomerID index.
+// The graph context above owns the open RecordBase and all three stores.
+{
+    using var reader = customers.Readers.Open();
+    if (reader.Read())
+    {
+        ShowcaseGraphCustomer customer = customers.Get(reader.ID);
+        Console.WriteLine($"{customer.Name}: {customer.Orders?.Count ?? 0} hydrated orders");
+    }
+}

@@ -1,0 +1,19 @@
+// A RecordBase is a named set of related files inside an application-selected folder.
+string recordBaseDirectory = Path.Combine(
+    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+    "AbraxasExamples",
+    "CreateAndReopen");
+Directory.CreateDirectory(recordBaseDirectory);
+
+// "showcase" becomes the shared filename stem: showcase.fractD, showcase.idgen, and so on.
+// CreateOrOpen creates those files when absent and opens them when already present.
+using (RecordBase created = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase"))
+{
+}
+
+// This short scope is valid when the task is truly finished. It is not a required per-operation pattern.
+// Reopening the same folder demonstrates that the RecordBase is durable.
+using RecordBase reopened = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase");
+Console.WriteLine($"Reopened {recordBaseDirectory}");
+Console.WriteLine($"Durable files: {Directory.EnumerateFiles(recordBaseDirectory).Count()}");
+Console.WriteLine($"Active stores: {reopened.GetStoreInfos()?.Count ?? 0}");

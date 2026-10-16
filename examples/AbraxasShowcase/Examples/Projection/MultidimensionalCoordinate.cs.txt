@@ -1,0 +1,9 @@
+// @row,column selects one element of a rank-two array by RecordID.
+{
+    using var reader = pathGraphs.Readers.Open();
+    if (reader.Read())
+    {
+        decimal latitude = pathGraphs.GetValue<decimal>(reader.ID, ".Coordinates@1,2.Latitude");
+        Console.WriteLine($"Coordinate [1,2] latitude: {latitude}");
+    }
+}

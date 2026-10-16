@@ -1,0 +1,81 @@
+name: Release
+on:
+  push:
+    tags: ['v*.*.*']
+permissions:
+  contents: read
+jobs:
+  version:
+    runs-on: windows-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Validate stable tag and project version
+        id: version
+        shell: pwsh
+        run: |
+          if ($env:GITHUB_REF_NAME -notmatch '^v(\d+\.\d+\.\d+)$') { throw 'Invalid stable tag.' }
+          $version = $Matches[1]
+          [xml]$project = Get-Content src/AbraxasDB/AbraxasDB.csproj -Raw
+          if ($version -cne [string]$project.Project.PropertyGroup.Version) { throw 'Tag/project version mismatch.' }
+          "version=$version" >> $env:GITHUB_OUTPUT
+  validation:
+    needs: version
+    uses: ./.github/workflows/validate.yml
+  publish:
+    needs: [version, validation]
+    if: github.repository == 'alt160/AbraxasDB'
+    runs-on: windows-latest
+    environment: release
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+      artifact-metadata: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6
+        with:
+          global-json-file: global.json
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: abraxasdb-candidate
+          path: artifacts/packages
+      - name: Recheck the tested package provenance and contents
+        shell: pwsh
+        env:
+          CANDIDATE_VERSION: ${{ needs.version.outputs.version }}
+        run: ./scripts/Test-ReleaseAssets.ps1 -Version $env:CANDIDATE_VERSION -ExpectedCommit $env:GITHUB_SHA
+      - uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4
+        with:
+          subject-path: |
+            artifacts/packages/*.nupkg
+            artifacts/packages/*.snupkg
+            artifacts/packages/*.zip
+      - uses: NuGet/login@ebc737b6fc418a6ca0073cf116ec8dc156d8b81e # v1
+        id: nuget
+        with:
+          user: iqueue
+      - name: Publish the tested package and symbols
+        shell: pwsh
+        env:
+          NUGET_API_KEY: ${{ steps.nuget.outputs.NUGET_API_KEY }}
+          CANDIDATE_VERSION: ${{ needs.version.outputs.version }}
+        run: |
+          dotnet nuget push "artifacts/packages/AbraxasDB.$env:CANDIDATE_VERSION.nupkg" --api-key $env:NUGET_API_KEY --source https://api.nuget.org/v3/index.json --skip-duplicate
+          if ($LASTEXITCODE -ne 0) { throw 'Package publication failed.' }
+          dotnet nuget push "artifacts/packages/AbraxasDB.$env:CANDIDATE_VERSION.snupkg" --api-key $env:NUGET_API_KEY --source https://api.nuget.org/v3/index.json --skip-duplicate
+          if ($LASTEXITCODE -ne 0) { throw 'Symbol publication failed.' }
+      - name: Create or resume the GitHub release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view $env:GITHUB_REF_NAME --repo $env:GITHUB_REPOSITORY *> $null
+          if ($LASTEXITCODE -eq 0) {
+            gh release upload $env:GITHUB_REF_NAME artifacts/packages/* --repo $env:GITHUB_REPOSITORY
+          } else {
+            gh release create $env:GITHUB_REF_NAME artifacts/packages/* --repo $env:GITHUB_REPOSITORY --verify-tag --generate-notes
+          }
+          if ($LASTEXITCODE -ne 0) { throw 'Release failed; do not replace existing assets blindly.' }

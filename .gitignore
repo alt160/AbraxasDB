@@ -1,0 +1,13 @@
+bin/
+obj/
+artifacts/
+.vs/
+.code-history/
+*.user
+*.suo
+*.log
+*.fractD
+*.fractX
+*.idgen
+*.lbdx
+*.shm

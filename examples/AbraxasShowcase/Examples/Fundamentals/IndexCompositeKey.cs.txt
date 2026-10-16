@@ -1,0 +1,34 @@
+string recordBaseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AbraxasExamples", "IndexCompositeKey");
+Directory.CreateDirectory(recordBaseDirectory);
+using RecordBase recordBase = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase");
+RecordStore<ShowcaseCustomer> customers = recordBase.CreateOrOpenStore<ShowcaseCustomer>("customers", "Showcase customers");
+
+ulong id = customers.Put(new ShowcaseCustomer { Code = "COMP-1", FirstName = "Ada", LastName = "Lovelace" });
+customers.Put(new ShowcaseCustomer { Code = "COMP-2", FirstName = "Ada", LastName = "Byron" });
+
+// Part order matters: FirstName is the leading key, then LastName within each first name.
+var selector = new Selector<ShowcaseCustomer>();
+customers.CreateCompositeIndex("display-name",
+    selector.Prop(customer => customer.FirstName).ForIndexing(),
+    selector.Prop(customer => customer.LastName).ForIndexing());
+// This is a logical name, not a member path on ShowcaseCustomer.
+
+// Build the condition from its individual parts, as you would with values from a form.
+// Abraxas maps these predicates to the routed composite index; no combined property is needed.
+string firstNamePrefix = "Ad";
+string requestedLastName = "Lovelace";
+var condition = customers.Where.Prop(customer => customer.FirstName).StartsWith(firstNamePrefix)
+    .AND.Prop(customer => customer.LastName).EqualTo(requestedLastName).EndCondition;
+ulong[] matches = customers.IterateRecordIDs(condition).ToArray();
+Console.WriteLine($"Prefix plus exact value found the intended RecordID: {matches.SequenceEqual([id])}");
+
+// The typed reader walks the persisted index directly, without opening customer objects.
+using var names = customers.Readers.OpenCompositeValues<string, string>("display-name");
+while (names.Read())
+{
+    // Value1 and Value2 decode strings only when requested. GetUtf8Span(0/1)
+    // borrows UTF-8 instead when byte-oriented work does not need managed strings.
+    string displayName = $"{names.Value1} {names.Value2}";
+    Console.WriteLine($"{names.ID}: {displayName}");
+}
+Console.WriteLine($"Named index: {customers.GetIndex("display-name").Name}");

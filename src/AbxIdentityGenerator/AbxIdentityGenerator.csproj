@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../AbraxasEdition.props" />
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>AbraxasDB</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <DebugType>portable</DebugType>
+    <EmbedAllSources>true</EmbedAllSources>
+    <Deterministic>true</Deterministic>
+    <PathMap>$(MSBuildProjectDirectory)=/_/src/AbxIdentityGenerator</PathMap>
+    <PathMap Condition="'$(ArtifactsPath)' != ''">$(PathMap),$(ArtifactsPath)=/_/artifacts</PathMap>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="FractalKVS" Version="1.0.1" />
+    <InternalsVisibleTo Include="AbraxasDB" />
+  </ItemGroup>
+</Project>

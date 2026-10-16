@@ -1,0 +1,66 @@
+// The order stores only ordered line IDs at .Lines; each line payload remains in graph-lines.
+byte[] PackLineIds(List<ShowcaseGraphLine>? values)
+{
+    int count = values?.Count ?? 0;
+    byte[] bytes = new byte[checked(4 + count * 8)];
+    BinaryPrimitives.WriteInt32LittleEndian(bytes, count);
+    for (int i = 0; i < count; i++) BinaryPrimitives.WriteUInt64LittleEndian(bytes.AsSpan(4 + i * 8), values![i].ID);
+    return bytes;
+}
+
+List<ShowcaseGraphLine> HydrateLines(RecordStore<ShowcaseGraphLine> lines, ReadOnlySpan<byte> bytes)
+{
+    if (bytes.Length < 4) throw new InvalidDataException("Invalid line identity payload.");
+    int count = BinaryPrimitives.ReadInt32LittleEndian(bytes);
+    if (count < 0 || bytes.Length != 4L + count * 8L) throw new InvalidDataException("Invalid line identity count.");
+    ulong[] ids = new ulong[count];
+    for (int i = 0; i < count; i++) ids[i] = BinaryPrimitives.ReadUInt64LittleEndian(bytes.Slice(4 + i * 8, 8));
+    IReadOnlyList<ShowcaseGraphLine> values = lines.GetMany(ids);
+    var result = new List<ShowcaseGraphLine>(count);
+    for (int i = 0; i < count; i++) { values[i].ID = ids[i]; result.Add(values[i]); }
+    return result;
+}
+
+void ConfigureGraphStores(RecordStore<ShowcaseGraphCustomer> customers, RecordStore<ShowcaseGraphOrder> orders, RecordStore<ShowcaseGraphLine> lines)
+{
+    lines.ObjectIDSetter = static (line, id) => line.ID = id;
+    orders.Links.Add(order => order.Lines, PackLineIds, bytes => HydrateLines(lines, bytes));
+    // The customer read derives Orders from the indexed child CustomerID path.
+    customers.Links.AddReadOnly<List<ShowcaseGraphOrder>>(".Orders", LinkSource.RecordID, bytes =>
+    {
+        ulong customerID = InhetoBinaryCodec.Decode<ulong>(bytes);
+        var result = new List<ShowcaseGraphOrder>();
+        var condition = orders.Where.Prop(order => order.CustomerID).EqualTo(customerID).EndCondition;
+        using var reader = orders.Readers.Open(condition);
+        while (reader.Read()) result.Add(reader.Get());
+        return result;
+    });
+}
+
+string recordBaseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AbraxasExamples", "ObjectGraphs");
+using var context = new ShowcaseGraphContext(recordBaseDirectory);
+RecordStore<ShowcaseGraphCustomer> customers = context.Customers;
+RecordStore<ShowcaseGraphOrder> orders = context.Orders;
+RecordStore<ShowcaseGraphLine> lines = context.Lines;
+ConfigureGraphStores(customers, orders, lines);
+int customerCount = 24;
+int ordersPerCustomer = 2;
+int randomSeed = 1729;
+{
+    var random = new Random(randomSeed);
+    for (int customerIndex = 0; customerIndex < customerCount; customerIndex++)
+    {
+        ulong customerID = customers.PutNoLinks(new ShowcaseGraphCustomer { Code = $"GC-{customerIndex + 1:0000000}", Name = $"Graph customer {customerIndex + 1:0000000}" });
+        for (int orderIndex = 0; orderIndex < ordersPerCustomer; orderIndex++)
+        {
+            var members = new List<ShowcaseGraphLine>();
+            for (int lineIndex = 0; lineIndex < 2; lineIndex++)
+            {
+                var line = new ShowcaseGraphLine { Sku = $"SKU-{lineIndex + 1:000}", Quantity = random.Next(1, 6) };
+                line.ID = lines.Put(line);
+                members.Add(line);
+            }
+            orders.Put(new ShowcaseGraphOrder { Number = $"GO-{customerIndex + 1:0000000}-{orderIndex + 1:00}", CustomerID = customerID, Lines = members });
+        }
+    }
+}

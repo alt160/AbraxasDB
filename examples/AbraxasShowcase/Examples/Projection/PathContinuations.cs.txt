@@ -1,0 +1,14 @@
+// The group context already owns customers. This read starts from its RecordID,
+// opens the stored .Code value, and evaluates each continuation on that value.
+// No ShowcaseCustomer is created, and neither Length result is stored separately.
+{
+    using var reader = customers.Readers.Open();
+    if (reader.Read())
+    {
+        ulong id = reader.ID;
+        string code = customers.GetValue<string>(id, ".Code");
+        int length = customers.GetValue<int>(id, ".Code.Length");
+        int trimmedLength = customers.GetValue<int>(id, ".Code.Trim().Length");
+        Console.WriteLine($"{code}: Length={length}, Trim().Length={trimmedLength}");
+    }
+}

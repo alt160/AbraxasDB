@@ -1,0 +1,13 @@
+string recordBaseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AbraxasExamples", "IndexTextProjections");
+Directory.CreateDirectory(recordBaseDirectory);
+using RecordBase recordBase = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase");
+RecordStore<ShowcaseCustomer> customers = recordBase.CreateOrOpenStore<ShowcaseCustomer>("customers", "Showcase customers");
+
+ulong id = customers.Put(new ShowcaseCustomer { Code = "TEXT-1", Name = "Taylor Example", Region = "West" });
+
+// Folded keys support no-case matching; reversed keys support suffix matching.
+// Neither is the same thing as physical descending sort order.
+customers.CreateIndex(customer => customer.Name, TextIndexProfile.ExactAndFolded, IndexDirection.Bidirectional);
+var condition = customers.Where.PropPath(".Name").AsString.EndsWith("EXAMPLE", ignoreCase: true).EndCondition;
+ulong[] matches = customers.IterateRecordIDs(condition).ToArray();
+Console.WriteLine($"Folded suffix lookup found inserted RecordID: {matches.SequenceEqual([id])}");

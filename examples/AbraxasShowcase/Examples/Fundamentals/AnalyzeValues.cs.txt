@@ -1,0 +1,42 @@
+string recordBaseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AbraxasExamples", "AnalyzeValues");
+Directory.CreateDirectory(recordBaseDirectory);
+using RecordBase recordBase = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase");
+RecordStore<ShowcaseOrder> orders = recordBase.CreateOrOpenStore<ShowcaseOrder>("orders", "Analysis orders");
+orders.Put(new ShowcaseOrder { Number = "A-1", CustomerID = 5, OrderedAt = new DateTime(2026, 1, 2), Total = 42.5m });
+orders.Put(new ShowcaseOrder { Number = "A-2", CustomerID = 6, OrderedAt = new DateTime(2026, 2, 3), Total = 17.25m });
+
+// Select three values without building a ShowcaseOrder for every row.
+// The struct is application-owned; a later Scale example measures allocation explicitly.
+decimal score = 0m;
+int rows = 0;
+using (var values = orders.OpenValuesReader(".Total", ".OrderedAt", ".CustomerID"))
+    while (values.Read())
+    {
+        var row = new ShowcaseOrderAnalysisRow(values.Get(0).AsDecimal ?? 0m,
+            values.Get(1).AsDateTime ?? default, values.Get(2).AsUInt64 ?? 0UL);
+        score += row.Score();
+        rows++;
+    }
+Console.WriteLine($"Analyzed {rows} orders with three selected values each; score {score:0.00}.");
+
+public struct ShowcaseOrderAnalysisRow
+{
+    public decimal Total { get; set; }
+    public DateTime OrderedAt { get; set; }
+    public ulong CustomerID { get; set; }
+
+    /// <summary>Copies three selected scalar values into application-owned struct state.<br/></summary>
+    /// <param name="total">Stored order total.<br/></param>
+    /// <param name="orderedAt">Stored order timestamp.<br/></param>
+    /// <param name="customerID">Stored customer RecordID.<br/></param>
+    public ShowcaseOrderAnalysisRow(decimal total, DateTime orderedAt, ulong customerID)
+    {
+        Total = total;
+        OrderedAt = orderedAt;
+        CustomerID = customerID;
+    }
+
+    /// <summary>Combines all three fields into one deterministic analysis score.<br/></summary>
+    /// <returns>Caller-defined multi-field result.<br/></returns>
+    public decimal Score() => Total * ((OrderedAt.Month % 4) + 1) + (CustomerID % 7);
+}

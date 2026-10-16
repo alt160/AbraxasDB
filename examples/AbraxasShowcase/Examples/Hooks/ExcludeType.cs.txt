@@ -1,0 +1,10 @@
+// Excluding ShowcaseHookTransient removes that type's payload wherever it occurs in this store.
+// documents belongs to the group context and remains available until that context is disposed.
+{
+    using var reader = documents.Readers.Open();
+    if (reader.Read())
+    {
+        ShowcaseHookDocument document = documents.Get(reader.ID);
+        Console.WriteLine($"{document.Title}: Transient is null = {document.Transient is null}");
+    }
+}

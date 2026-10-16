@@ -1,0 +1,12 @@
+// Orders hold their parent's external RecordID; no child array is copied into the customer.
+// The group context above owns the open RecordBase and stores.
+{
+    using var parent = customers.Readers.Open();
+    if (parent.Read())
+    {
+        ulong customerID = parent.ID;
+        var condition = orders.Where.Prop(order => order.CustomerID).EqualTo(customerID).EndCondition;
+        foreach (ulong orderID in orders.IterateRecordIDs(condition).Take(8))
+            Console.WriteLine($"{customerID} → {orderID}: {orders.Get(orderID).Number}");
+    }
+}

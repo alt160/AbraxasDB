@@ -1,0 +1,11 @@
+// The same reader pattern works for any typed RecordStore.
+{
+    using var reader = orders.Readers.Open();
+    int shown = 0;
+    while (shown < 8 && reader.Read())
+    {
+        ShowcaseOrder order = reader.Get();
+        Console.WriteLine($"{reader.ID}: {order.Number}");
+        shown++;
+    }
+}

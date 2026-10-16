@@ -1,0 +1,5 @@
+// recordBase is owned by this group's long-lived context.
+RecordBase.StoreInfo customerStore = recordBase.GetStoreInfo("customers")
+    ?? throw new InvalidOperationException("The customers store is missing.");
+RecordBase.StoreInfo orderStore = recordBase.GetStoreInfo("orders")
+    ?? throw new InvalidOperationException("The orders store is missing.");

@@ -1,0 +1,11 @@
+// ConfigureGraphStores registered the .Lines link when this store opened.
+// The graph context above owns the open RecordBase and all three stores.
+{
+    using var reader = orders.Readers.Open();
+    if (reader.Read())
+    {
+        ShowcaseGraphOrder order = orders.Get(reader.ID);
+        foreach (ShowcaseGraphLine line in order.Lines ?? [])
+            Console.WriteLine($"{order.Number}: {line.ID} · {line.Sku} × {line.Quantity}");
+    }
+}

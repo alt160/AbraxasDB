@@ -1,0 +1,13 @@
+string recordBaseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AbraxasExamples", "IndexMethodPath");
+Directory.CreateDirectory(recordBaseDirectory);
+using RecordBase recordBase = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase");
+RecordStore<ShowcaseCustomer> customers = recordBase.CreateOrOpenStore<ShowcaseCustomer>("customers", "Showcase customers");
+
+ulong id = customers.Put(new ShowcaseCustomer { Code = " PATH-1 ", Name = "Path example", Region = "West", Tags = ["priority"] });
+
+// A configured path can be selected at runtime; Abraxas validates its admitted member chain.
+string indexPath = ".Code.Trim().Length";
+customers.CreateIndex(new PropPath(indexPath), IndexDirection.Ascending);
+var condition = customers.Where.PropPath(indexPath).AsInt32.EqualTo(6).EndCondition;
+ulong[] matches = customers.IterateRecordIDs(condition).ToArray();
+Console.WriteLine($"Indexed path .Code.Trim().Length found inserted RecordID: {matches.SequenceEqual([id])}");

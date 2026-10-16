@@ -1,0 +1,27 @@
+// One owner keeps all three stores available throughout this group's work.
+public sealed class ShowcaseProjectionContext : IDisposable
+{
+    private readonly RecordBase recordBase;
+    public RecordStore<ShowcaseCustomer> Customers { get; }
+    public RecordStore<ShowcaseOrder> Orders { get; }
+    public RecordStore<ShowcasePathGraph> PathGraphs { get; }
+
+    /// <summary>Opens the group's named RecordBase, ordinary stores, and one path-navigation graph store.<br/></summary>
+    /// <param name="directory">Application-owned folder for the RecordBase file set.<br/></param>
+    public ShowcaseProjectionContext(string directory)
+    {
+        Directory.CreateDirectory(directory);
+        recordBase = RecordBase.CreateOrOpen(directory, "showcase");
+        Customers = recordBase.CreateOrOpenStore<ShowcaseCustomer>("customers", "Showcase customers");
+        Orders = recordBase.CreateOrOpenStore<ShowcaseOrder>("orders", "Normalized showcase orders");
+        PathGraphs = recordBase.CreateOrOpenStore<ShowcasePathGraph>("path-graphs", "PropPath navigation through stored object graphs");
+        Customers.CreateIndex(customer => customer.Code, IndexDirection.Ascending);
+        Customers.CreateIndex(customer => customer.Region, IndexDirection.Ascending);
+        Orders.CreateIndex(order => order.CustomerID, IndexDirection.Ascending);
+        Orders.CreateIndex(order => order.OrderedAt, IndexDirection.Ascending);
+        Orders.CreateIndex(order => order.Status, IndexDirection.Ascending);
+    }
+
+    /// <summary>Closes this group's RecordBase after its stores are no longer used.<br/></summary>
+    public void Dispose() => recordBase.Dispose();
+}

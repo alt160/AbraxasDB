@@ -1,0 +1,42 @@
+string recordBaseDirectory = Path.Combine(
+    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+    "AbraxasExamples", "UniqueCompositeIndex");
+Directory.CreateDirectory(recordBaseDirectory);
+
+ulong northAdaId;
+ulong southAdaId;
+ulong northGraceId;
+bool duplicateRejected = false;
+using (RecordBase recordBase = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase"))
+{
+    RecordStore<ShowcaseUniqueAccount> accounts = recordBase.CreateOrOpenStore<ShowcaseUniqueAccount>(
+        "accounts", "Unique account examples");
+    var selector = new Selector<ShowcaseUniqueAccount>();
+    accounts.CreateCompositeIndex("tenant-login",
+        new RecordStore<ShowcaseUniqueAccount>.CompositeIndexOptions { Unique = true },
+        selector.Prop(account => account.Tenant).ForIndexing(),
+        selector.Prop(account => account.Login).ForIndexing());
+
+    // The full pair must be unique. Neither Tenant nor Login is unique by itself.
+    northAdaId = accounts.Put(new ShowcaseUniqueAccount { Tenant = "north", Login = "ada", AccountNumber = 1001, Name = "North Ada" });
+    southAdaId = accounts.Put(new ShowcaseUniqueAccount { Tenant = "south", Login = "ada", AccountNumber = 1002, Name = "South Ada" });
+    northGraceId = accounts.Put(new ShowcaseUniqueAccount { Tenant = "north", Login = "grace", AccountNumber = 1003, Name = "North Grace" });
+    try
+    {
+        accounts.Put(new ShowcaseUniqueAccount { Tenant = "north", Login = "ada", AccountNumber = 9999, Name = "Duplicate" });
+    }
+    catch (IndexContractException error) when (error.FailureKind == IndexContractFailureKind.UniqueConstraint)
+    {
+        duplicateRejected = true;
+    }
+}
+
+using (RecordBase reopened = RecordBase.CreateOrOpen(recordBaseDirectory, "showcase"))
+{
+    RecordStore<ShowcaseUniqueAccount> accounts = reopened.OpenStore<ShowcaseUniqueAccount>("accounts");
+    Console.WriteLine($"Duplicate complete pair rejected: {duplicateRejected}");
+    Console.WriteLine($"North/Ada survived: {accounts.Get(northAdaId)?.Name == "North Ada"}");
+    Console.WriteLine($"South/Ada survived: {accounts.Get(southAdaId)?.Name == "South Ada"}");
+    Console.WriteLine($"North/Grace survived: {accounts.Get(northGraceId)?.Name == "North Grace"}");
+    Console.WriteLine($"Accepted records: {accounts.Count}");
+}

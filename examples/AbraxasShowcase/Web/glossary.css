@@ -1,0 +1,98 @@
+.scenarios-label small {
+  display: block;
+  max-width: 240px;
+  margin-top: 6px;
+  color: #b6b6b6;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.glossary-term {
+  border-bottom: 1px dotted color-mix(in srgb, var(--accent) 68%, #f1f1f1);
+  border-radius: 2px;
+  cursor: help;
+  text-decoration: none;
+  text-underline-offset: 3px;
+}
+.glossary-term:hover,
+.glossary-term:focus-visible,
+.glossary-term[aria-expanded="true"] {
+  color: color-mix(in srgb, var(--accent) 38%, #fff);
+  border-bottom-style: solid;
+  outline: none;
+}
+.glossary-term:focus-visible {
+  box-shadow: 0 2px 0 var(--accent);
+}
+.glossary-popover[hidden] { display: none; }
+.glossary-popover {
+  position: fixed;
+  z-index: 600;
+  width: min(370px, calc(100vw - 24px));
+  max-height: min(440px, calc(100vh - 24px));
+  overflow: auto;
+  padding: 16px 18px 14px;
+  border: 1px solid color-mix(in srgb, var(--accent) 50%, #535353);
+  border-top: 3px solid var(--accent);
+  border-radius: 9px;
+  background: #292929;
+  color: #f2f2f2;
+  box-shadow: 0 18px 50px #000b;
+}
+.glossary-popover-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 2px 12px;
+}
+.glossary-popover-head small {
+  grid-column: 1;
+  color: color-mix(in srgb, var(--accent) 55%, #fff);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .13em;
+}
+.glossary-popover-head strong {
+  grid-column: 1;
+  font-size: 16px;
+}
+.glossary-close {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: start;
+  border: 1px solid #575757;
+  border-radius: 5px;
+  background: #353535;
+  color: #fff;
+  font-size: 17px;
+  cursor: pointer;
+}
+.glossary-popover p {
+  margin: 12px 0 0;
+  color: #e0e0e0;
+  font-size: 12px;
+  line-height: 1.48;
+}
+.glossary-popover .glossary-detail {
+  color: #bfc4c9;
+  font-size: 11px;
+}
+.glossary-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+.glossary-actions:empty { display: none; }
+.glossary-actions button {
+  padding: 6px 10px;
+  border: 1px solid #626262;
+  border-radius: 6px;
+  background: #363638;
+  color: #fff;
+  font-size: 11px;
+  cursor: pointer;
+}
+.glossary-actions button:hover { border-color: var(--accent); }

@@ -1,0 +1,5 @@
+// The aggregate reads stored Total values without hydrating every order.
+{
+    decimal total = orders.Aggregates.Sum(order => order.Total);
+    Console.WriteLine($"Order total: {total}");
+}
