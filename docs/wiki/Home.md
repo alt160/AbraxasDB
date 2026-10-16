@@ -1,5 +1,7 @@
 # Abraxas guides
 
+> Archived staging copy. The maintained guide is in the [GitHub wiki](https://github.com/alt160/AbraxasDB/wiki/Home). Edit the wiki rather than this snapshot.
+
 Abraxas is an embedded, .NET-native recordbase for applications that maintain substantial local repositories of structured data. It persists ordinary .NET objects and reads back complete objects or selected values. Asset and engineering repositories, analysis datasets, and legal or technical reference libraries are examples—not industry boundaries. Smaller application-data uses fit too. These guides cover the open-source edition.
 
 Start with [Getting started](Getting-started.md), then read [Queries and indexes](Queries-and-indexes.md). The other guides cover the controls and operational details you need as the application grows.
