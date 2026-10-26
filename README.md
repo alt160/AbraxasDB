@@ -1,6 +1,4 @@
-<p align="center">
-  <img src="https://raw.githubusercontent.com/alt160/AbraxasDB/main/docs/images/AbraxasDB.png" width="420" alt="AbraxasDB logo" />
-</p>
+![AbraxasDB logo](https://raw.githubusercontent.com/alt160/AbraxasDB/main/docs/images/AbraxasDB.png)
 
 # Abraxas
 
@@ -184,8 +182,8 @@ Two optional Windows apps demonstrate the public package. Each has its own sourc
 
 The app ZIPs require the **.NET 10 Windows Desktop Runtime (x64)** and **WebView2 Evergreen Runtime**, installed separately. They do not bundle .NET. AbraxasDB and its component libraries remain on .NET 8.
 
-<a href="https://github.com/alt160/AbraxasDB.Showcase"><img src="https://raw.githubusercontent.com/alt160/AbraxasDB.Showcase/v1.0.0/docs/images/showcase-home.png" width="420" alt="Abraxas Showcase welcome page" /></a>
-<a href="https://github.com/alt160/AbraxasDB.MeridianTrading"><img src="https://raw.githubusercontent.com/alt160/AbraxasDB.MeridianTrading/v1.0.0/docs/images/meridian-overview.png" width="420" alt="Meridian Trading overview" /></a>
+[![Abraxas Showcase welcome page](https://raw.githubusercontent.com/alt160/AbraxasDB.Showcase/v1.0.0/docs/images/showcase-home.png)](https://github.com/alt160/AbraxasDB.Showcase)
+[![Meridian Trading overview](https://raw.githubusercontent.com/alt160/AbraxasDB.MeridianTrading/v1.0.0/docs/images/meridian-overview.png)](https://github.com/alt160/AbraxasDB.MeridianTrading)
 
 Earlier .NET 8 sample builds remain available in the existing AbraxasDB releases.
 
