@@ -183,6 +183,8 @@ The app ZIPs require the **.NET 10 Windows Desktop Runtime (x64)** and **WebView
 
 Earlier .NET 8 sample builds remain available in the existing AbraxasDB releases.
 
+The current library source tree contains neither desktop app. To avoid fetching their historical Git objects, clone the current tree with `git clone --depth 1 https://github.com/alt160/AbraxasDB.git`.
+
 The [GitHub wiki](https://github.com/alt160/AbraxasDB/wiki/Home) is the maintained home for the guides:
 
 - [Getting started](https://github.com/alt160/AbraxasDB/wiki/Getting-started)

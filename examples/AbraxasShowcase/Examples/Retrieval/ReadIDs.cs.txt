@@ -1,5 +1,0 @@
-// IterateRecordIDs does not require a destination customer object.
-{
-    foreach (ulong recordID in customers.IterateRecordIDs().Take(8))
-        Console.WriteLine(recordID);
-}

@@ -1,3 +1,0 @@
-// customers and orders remain open in this group's context.
-ulong storedCustomerCount = customers.Aggregates.Count();
-ulong storedOrderCount = orders.Aggregates.Count();

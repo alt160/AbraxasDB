@@ -1,9 +1,0 @@
-// A scalar-only read need not populate the customer's reverse Orders link.
-{
-    using var reader = customers.Readers.Open();
-    if (reader.Read())
-    {
-        ShowcaseGraphCustomer customer = reader.GetNoLinks();
-        Console.WriteLine($"{customer.Name}; Orders loaded: {customer.Orders is not null}");
-    }
-}
