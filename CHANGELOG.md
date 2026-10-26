@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.4 — 2026-10-26
+
+- Use standard Markdown images for the logo and app screenshots. NuGet escapes raw HTML image tags as text; Markdown images render on both NuGet and GitHub.
+- Runtime implementation, public API, dependencies, formats and .NET 8 targeting are unchanged from 1.0.3 and 1.0.2. All earlier versions remain available.
+
 ## 1.0.3 — 2026-10-26
 
 - Documentation-only package update: the README displays the AbraxasDB logo and introduces the Showcase and Meridian Trading repositories near the top, alongside the existing detailed app links and download requirements.
