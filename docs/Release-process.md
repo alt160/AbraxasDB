@@ -1,16 +1,18 @@
 # Release process
 
-The public repository must start from the reviewed OSS export with new Git history. Never push the private development repository or its history. `scripts/Build-Release.ps1` rejects a nested private export unless explicitly run in non-shipping diagnostic mode.
+The public repository began with the reviewed OSS export and clean public history. Preserve that existing public history for updates; never push the private development repository or its history. `scripts/Build-Release.ps1` rejects a nested private export unless explicitly run in non-shipping diagnostic mode.
 
-Before the first release, configure `alt160/AbraxasDB`:
+Before a library release:
 
-1. Create/verify the public repository, default branch `main`, Apache-2.0 source, private vulnerability reporting, and a `release` environment restricted to stable release tags.
-2. Protect main against deletion and force pushes. Require pull requests and the successful `OSS package and Windows samples` and `Linux core build` checks; an administrator emergency bypass is an explicit exception, not the normal path.
-3. On NuGet.org, sign in as **iqueue** and create a trusted publishing policy for GitHub owner **alt160**, repository **AbraxasDB**, workflow **release.yml**, environment **release**, push scope, exact package glob **AbraxasDB**. A BufferStream/Fractal policy does not match a different GitHub repository even if its package glob is expanded.
-4. Validate a fresh standalone public checkout, package-only consumption on .NET 8/9/10, and both sample apps. Windows runtime tests are the initial verified platform evidence. Linux CI compilation is not Linux/macOS durability/runtime acceptance.
-5. Review release notes and the version in `src/AbraxasDB/AbraxasDB.csproj`. Commit the accepted public tree; build from that commit. Do not reuse diagnostic packages built below the private checkout.
-6. Push the approved stable `v<version>` tag. The workflow checks the tag, builds with a stable SDK, checks AnyCPU and both owned PDBs, builds package-only Windows samples, attests artifacts, and publishes through NuGet trusted publishing. It refuses blind replacement of existing release assets.
+1. Verify the public repository, default branch `main`, Apache-2.0 source, private vulnerability reporting and the `release` environment restricted to stable release tags.
+2. Keep main protected against deletion and force pushes. Require successful `OSS package and Windows samples` and `Linux core build` checks. The existing Windows check name is retained for branch-rule compatibility; its job now builds and inspects library assets only. An administrator emergency bypass is an exception, not the normal path.
+3. Verify the NuGet trusted publishing policy: user **iqueue**, GitHub owner **alt160**, repository **AbraxasDB**, workflow **release.yml**, environment **release**, push scope, exact package glob **AbraxasDB**.
+4. Validate a fresh standalone public checkout, package/symbol contents, and package-only consumption on .NET 8/9/10. Windows runtime tests are the initial verified platform evidence. Linux CI compilation is not Linux/macOS durability/runtime acceptance.
+5. Review release notes and the version in `src/AbraxasDB/AbraxasDB.csproj`. Commit the accepted public tree and build from that commit. Do not reuse diagnostic packages built below the private checkout.
+6. Push the approved stable `v<version>` tag. The workflow checks the tag, builds with a stable SDK, checks AnyCPU and both owned PDBs, attests artifacts, and publishes through NuGet trusted publishing. It refuses blind replacement of existing release assets.
 
-The GitHub release contains the package, symbols, precompiled net8.0 library, framework-dependent Windows sample apps, and SHA-256 checksums. GitHub's source archives contain only the reviewed public repository. NuGet contains only the runtime library/helper and package documentation—not the apps, test harnesses or commercial implementation.
+The library GitHub release contains the NuGet package, symbols, precompiled net8.0 library ZIP and SHA-256 checksums. NuGet contains the runtime library/helper and package documentation. Neither distribution contains desktop apps, private test harnesses or commercial implementation.
 
-The sample apps require .NET 8 Windows Desktop (x64) and WebView2 Evergreen. NuGet is the recommended way to resolve the library's dependencies. No commercial website is required for the OSS release; add links only after the site exists.
+[Abraxas Showcase](https://github.com/alt160/AbraxasDB.Showcase) and [Meridian Trading](https://github.com/alt160/AbraxasDB.MeridianTrading) own their source, CI and portable ZIP releases separately. Their .NET 10 Windows Desktop/WebView2 prerequisites do not apply to the library build. Existing library releases that included earlier app snapshots remain available.
+
+No commercial website is required for an OSS release; add links only after the site exists.
