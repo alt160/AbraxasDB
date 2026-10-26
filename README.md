@@ -8,6 +8,8 @@
 
 Abraxas is an embedded, .NET-native recordbase for applications that maintain substantial local repositories of structured data. It persists ordinary .NET objects and lets you read back complete objects or selected values. Its serialization, record-storage, indexing, and query engines run inside your application—not in a separate database server or an unmanaged database engine.
 
+**See it in use:** [Abraxas Showcase](https://github.com/alt160/AbraxasDB.Showcase) provides runnable lessons and complete C# examples; [Meridian Trading](https://github.com/alt160/AbraxasDB.MeridianTrading) is a complete reference application. Both repositories include portable Windows downloads.
+
 In simplest terms: **object → storage → object**, or **object → storage → selected values**.
 
 The driving goal is low or no developer ceremony. That includes performance and memory efficiency, not just fewer lines in the first example. This README describes the open-source edition only.

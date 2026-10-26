@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.3 — 2026-10-26
+
+- Documentation-only package update: the README displays the AbraxasDB logo and introduces the Showcase and Meridian Trading repositories near the top, alongside the existing detailed app links and download requirements.
+- Runtime implementation, public API, component dependencies, on-disk formats and .NET 8 targeting are unchanged from 1.0.2.
+- All earlier package versions remain available.
+
 ## 1.0.2 — 2026-10-26
 
 - Documentation-only package update: the README links to the separate Showcase and Meridian Trading repositories and portable ZIP releases, with screenshots and app prerequisites.
