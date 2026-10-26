@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/alt160/AbraxasDB/main/docs/images/AbraxasDB.png" width="420" alt="AbraxasDB logo" />
+</p>
+
 # Abraxas
 
 *Data persistence for developers, not professors.*
