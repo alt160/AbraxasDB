@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>AbraxasDB</PackageId>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Authors>alt160</Authors>
     <Copyright>Copyright (c) 2026 alt160</Copyright>
     <Description>An embedded, .NET-native object recordbase with durable records, maintained indexes, selective value reads, and low-ceremony application types. Open-source edition.</Description>
