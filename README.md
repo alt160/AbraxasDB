@@ -169,7 +169,19 @@ A separately licensed commercial edition provides expanded capacity and addition
 
 ## Guides
 
-Two optional Windows apps demonstrate the public package: [Abraxas Showcase](examples/AbraxasShowcase/README.md) provides runnable lessons and complete C# examples; [Meridian Trading](examples/MeridianTrading/README.md) demonstrates a normalized local repository, natural object graphs, searches, analysis and editing. They are separate from the library package. Their precompiled builds require .NET 8 Windows Desktop (x64) and WebView2 Evergreen.
+Two optional Windows apps demonstrate the public package. Each has its own source repository and precompiled portable ZIP releases:
+
+| App | What it demonstrates | Download |
+| --- | --- | --- |
+| [Abraxas Showcase](https://github.com/alt160/AbraxasDB.Showcase) | Runnable lessons, complete C# examples, object inspection and memory-backed indexes. | [Windows x64 ZIP](https://github.com/alt160/AbraxasDB.Showcase/releases/latest) |
+| [Meridian Trading](https://github.com/alt160/AbraxasDB.MeridianTrading) | A local trading repository with linked object graphs, indexed browsing, analysis and editing. | [Windows x64 ZIP](https://github.com/alt160/AbraxasDB.MeridianTrading/releases/latest) |
+
+The app ZIPs require the **.NET 10 Windows Desktop Runtime (x64)** and **WebView2 Evergreen Runtime**, installed separately. They do not bundle .NET. AbraxasDB and its component libraries remain on .NET 8.
+
+<a href="https://github.com/alt160/AbraxasDB.Showcase"><img src="https://raw.githubusercontent.com/alt160/AbraxasDB.Showcase/v1.0.0/docs/images/showcase-home.png" width="420" alt="Abraxas Showcase welcome page" /></a>
+<a href="https://github.com/alt160/AbraxasDB.MeridianTrading"><img src="https://raw.githubusercontent.com/alt160/AbraxasDB.MeridianTrading/v1.0.0/docs/images/meridian-overview.png" width="420" alt="Meridian Trading overview" /></a>
+
+Earlier .NET 8 sample builds remain available in the existing AbraxasDB releases.
 
 The [GitHub wiki](https://github.com/alt160/AbraxasDB/wiki/Home) is the maintained home for the guides:
 
