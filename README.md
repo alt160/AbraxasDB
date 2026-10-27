@@ -12,7 +12,17 @@ In simplest terms: **object → storage → object**, or **object → storage �
 
 The driving goal is low or no developer ceremony. That includes performance and memory efficiency, not just fewer lines in the first example. This README describes the open-source edition only.
 
-[First record](#a-first-record) · [Queries and values](#find-records-or-just-read-their-values) · [Important contracts](#important-contracts) · [OSS limits](#open-source-edition) · [Guides](https://github.com/alt160/AbraxasDB/wiki/Home)
+[Playground](#try-abraxas-online) · [First record](#a-first-record) · [Queries and values](#find-records-or-just-read-their-values) · [Important contracts](#important-contracts) · [OSS limits](#open-source-edition) · [Guides](https://github.com/alt160/AbraxasDB/wiki/Home)
+
+## Try Abraxas online
+
+Open an example in .NET Fiddle, edit the C# code, and click **Run**. No local project or SDK setup is required.
+
+- [Records and persistence](https://dotnetfiddle.net/3qe7Zv) — Save ordinary C# objects, read them by ID, and reopen the database.
+- [Queries and indexes](https://dotnetfiddle.net/FdY7Ux) — Filter records, add an index, and read selected values.
+- [Backup and restore](https://dotnetfiddle.net/hyxajS) — Create a snapshot and restore it into a separate database.
+
+These starter examples use AbraxasDB 1.0.4 on .NET 10. Each run creates a fresh temporary database and removes it when finished.
 
 ## Why Abraxas?
 
