@@ -2,6 +2,8 @@
 
 # Abraxas
 
+[![NuGet](https://img.shields.io/nuget/v/AbraxasDB.svg)](https://www.nuget.org/packages/AbraxasDB)
+
 *Data persistence for developers, not professors.*
 
 Abraxas is an embedded, .NET-native recordbase for applications that maintain substantial local repositories of structured data. It persists ordinary .NET objects and lets you read back complete objects or selected values. Its serialization, record-storage, indexing, and query engines run inside your application—not in a separate database server or an unmanaged database engine.
@@ -12,7 +14,17 @@ In simplest terms: **object → storage → object**, or **object → storage �
 
 The driving goal is low or no developer ceremony. That includes performance and memory efficiency, not just fewer lines in the first example. This README describes the open-source edition only.
 
-[Playground](#try-abraxas-online) · [First record](#a-first-record) · [Queries and values](#find-records-or-just-read-their-values) · [Important contracts](#important-contracts) · [OSS limits](#open-source-edition) · [Guides](https://github.com/alt160/AbraxasDB/wiki/Home)
+[Install](#install) · [Playground](#try-abraxas-online) · [First record](#a-first-record) · [Queries and values](#find-records-or-just-read-their-values) · [Important contracts](#important-contracts) · [OSS limits](#open-source-edition) · [Guides](https://github.com/alt160/AbraxasDB/wiki/Home)
+
+## Install
+
+Install the [AbraxasDB NuGet package](https://www.nuget.org/packages/AbraxasDB):
+
+```shell
+dotnet add package AbraxasDB
+```
+
+The library targets .NET 8 and works with compatible later .NET runtimes, including .NET 9 and 10. Windows is the currently runtime-validated release platform; Linux/macOS runtime and durability acceptance are not yet claimed.
 
 ## Try Abraxas online
 
@@ -37,12 +49,6 @@ Abraxas brings serialization, durable record storage, and maintained indexes tog
 - **Avoid hand-maintained sidecars.** Abraxas coordinates records and their indexes; secondary indexes can be rebuilt from authoritative records without rewriting their payloads.
 
 ## A first record
-
-Install the `AbraxasDB` NuGet package. The library targets .NET 8 and works with compatible later .NET runtimes, including .NET 9 and 10. Windows is the currently runtime-validated release platform; Linux/macOS runtime and durability acceptance are not yet claimed.
-
-```shell
-dotnet add package AbraxasDB
-```
 
 Consider an existing application type. It needs no Abraxas-specific changes:
 
